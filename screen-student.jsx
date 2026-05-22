@@ -684,23 +684,22 @@ const QRPage = ({activeClass, setActiveClass}) => {
 
 const StudentMobile = ({activeClass}) => {
   const store = window.useStore();
-  const cls = store.classes.find(c=>c.id===activeClass) || store.classes[0];
-  const [step, setStep] = useState("login");
+  const cls = store.classes.find(c => c.id === activeClass) || store.classes[0];
+  const [step, setStep] = useState("login"); // login | dashboard
   const [pin, setPin] = useState("");
   const [studentId, setStudentId] = useState("");
   const [loginError, setLoginError] = useState("");
+
+  const s = store.students.find(x => x.id === studentId);
   const cats = store.categories;
-  const s = store.students.find(x => x.id === studentId && x.classId === cls.id);
-  const sc = (s && store.scores[s.id]) || {};
+  const sc = store.scores[s?.id] || {};
   const maxTotal = window.maxTotal();
-  const total = s ? cats.reduce((a,c)=>a+(sc[c.key]||0), 0) : 0;
+  const total = cats.reduce((a,c) => a+(sc[c.key]||0), 0);
   const pct = maxTotal ? (total/maxTotal)*100 : 0;
-  const grade = s ? window.gradeFor(pct) : "-";
-  // Compute attendance counts from real attendance table for this student in this class
-  // Don't use useMemo — store.attendance is mutated in place; recompute every render.
+  const grade = window.gradeFor(pct);
+
   const att = (() => {
     const c = {present:0, absent:0, leave:0, skip:0};
-    if (!s) return c;
     const byDate = store.attendance[cls.id] || {};
     Object.values(byDate).forEach(dayMap => {
       const st = dayMap[s.id];
@@ -709,34 +708,18 @@ const StudentMobile = ({activeClass}) => {
     return c;
   })();
   const attTotal = att.present + att.absent + att.leave + att.skip;
-  const attPct = attTotal ? Math.round((att.present/attTotal)*100) : 0;
+  const attPct = attTotal ? Math.round((att.present / attTotal) * 100) : 0;
 
   const tryLogin = () => {
-    const id = pin.trim();
-    if (!id) { setLoginError("กรุณากรอกเลขประจำตัว"); return; }
-    const found = store.students.find(x => x.id === id);
-    if (!found) {
-      setLoginError("ไม่พบเลขประจำตัวนี้ในระบบ");
+    const found = store.students.find(s => s.id === pin && s.classId === cls.id);
+    if (!found){
+      setLoginError("ไม่พบเลขนี้ในห้องนี้");
       return;
     }
-    if (found.classId !== cls.id) {
-      const realCls = store.classes.find(c => c.id === found.classId);
-      setLoginError(`เลขนี้อยู่ห้อง ${realCls ? realCls.name : "อื่น"} — เลือกห้องให้ถูกต้อง`);
-      return;
-    }
-    setLoginError("");
-    setStudentId(id);
+    setStudentId(found.id);
+    setPin("");
     setStep("dashboard");
   };
-
-  React.useEffect(() => {
-    setStep("login");
-    setPin("");
-    setStudentId("");
-    setLoginError("");
-  }, [cls.id]);
-
-  const classRoster = store.students.filter(x => x.classId === cls.id).sort((a,b)=>a.no-b.no);
 
   return (
     <div className="main fade-in">
@@ -747,33 +730,49 @@ const StudentMobile = ({activeClass}) => {
           <div className="phone-screen">
             <div className="phone-notch"></div>
             {step === "login" ? (
+              // ===== LOGIN SCREEN (Modern & Vibrant) =====
               <div style={{padding:"64px 24px 28px", display:"flex", flexDirection:"column", alignItems:"center", height:"100%", background:"linear-gradient(135deg, rgba(79,70,229,.04) 0%, rgba(10,185,209,.04) 100%)"}}>
+
+                {/* Class Avatar with Gradient */}
                 <div style={{width:88, height:88, borderRadius:20, background:"linear-gradient(135deg, " + cls.color + " 0%, " + cls.color + "dd 100%)", display:"flex", alignItems:"center", justifyContent:"center", color:"#fff", fontFamily:"var(--font-num)", fontWeight:700, fontSize:32, marginTop:20, boxShadow:"0 8px 24px rgba(79,70,229,.25)"}}>
                   {cls.code.split("-")[0].slice(0,2)}
                 </div>
+
+                {/* Class Info */}
                 <div className="bold" style={{marginTop:24, fontSize:20, letterSpacing:-0.5}}>{cls.name}</div>
                 <div className="muted text-sm" style={{marginTop:4, fontSize:13}}>เช็คคะแนน · การเข้าเรียน</div>
                 <div className="divider" style={{width:"70%", marginTop:20, marginBottom:0}}></div>
+
+                {/* Login Card */}
                 <div className="card" style={{marginTop:24, width:"100%", padding:24, boxShadow:"var(--shadow-md)", borderColor: loginError ? "#FCA5A5" : "var(--line)"}}>
                   <div className="bold" style={{marginBottom:8, fontSize:15}}>เลขประจำตัวของคุณ</div>
                   <div className="muted text-sm" style={{marginBottom:14, fontSize:12}}>ใส่เลขที่ครูกำหนดให้เพื่อดูข้อมูล</div>
-                  <input className="input num" style={{width:"100%", fontSize:28, letterSpacing:4, textAlign:"center", borderColor: loginError ? "#EF4444" : "var(--line)", borderWidth: loginError ? 2 : 1, padding:"18px 14px", fontWeight:"700", background:"#fff"}}
+
+                  <input className="input num"
+                    style={{width:"100%", fontSize:28, letterSpacing:4, textAlign:"center", borderColor: loginError ? "#EF4444" : "var(--line)", borderWidth: loginError ? 2 : 1, padding:"18px 14px", fontWeight:"700", background:"#fff"}}
                     placeholder="กรอกเลข"
                     value={pin}
                     onChange={e=>{ setPin(e.target.value); setLoginError(""); }}
                     onKeyDown={e=>{ if(e.key==="Enter") tryLogin(); }}
                     autoFocus/>
+
+                  {/* Error Message */}
                   {loginError && (
                     <div style={{marginTop:10, padding:"10px 12px", background:"linear-gradient(135deg, #FEE2E2 0%, #FEF2F2 100%)", color:"#991B1B", borderRadius:10, fontSize:12, textAlign:"center", borderLeft:"3px solid #EF4444", fontWeight:500}}>
                       ❌ {loginError}
                     </div>
                   )}
-                  <button className="btn btn-primary" style={{width:"100%", marginTop:20, justifyContent:"center", padding:"12px 16px", fontSize:14, fontWeight:600, boxShadow:"0 6px 16px rgba(79,70,229,.3)"}}
+
+                  {/* Login Button */}
+                  <button className="btn btn-primary"
+                    style={{width:"100%", marginTop:20, justifyContent:"center", padding:"12px 16px", fontSize:14, fontWeight:600, boxShadow:"0 6px 16px rgba(79,70,229,.3)"}}
                     disabled={!pin.trim()}
                     onClick={tryLogin}>
                     เข้าสู่ระบบ
                   </button>
                 </div>
+
+                {/* Footer */}
                 <div className="muted text-sm" style={{marginTop:"auto", paddingTop:16, fontSize:11, textAlign:"center"}}>
                   <div style={{display:"flex", alignItems:"center", justifyContent:"center", gap:6, marginBottom:2}}>
                     🔒 <span style={{fontWeight:600}}>ปลอดภัย</span>
@@ -782,13 +781,17 @@ const StudentMobile = ({activeClass}) => {
                 </div>
               </div>
             ) : !s ? (
+              // Not found
               <div style={{padding:"60px 24px", textAlign:"center"}}>
                 <div className="muted">ไม่พบข้อมูลนักเรียน</div>
                 <button className="btn btn-primary" style={{marginTop:14}}
                   onClick={()=>{ setStep("login"); setStudentId(""); setPin(""); }}>กลับ</button>
               </div>
             ) : (
+              // ===== DASHBOARD SCREEN (Modern & Vibrant) =====
               <div style={{padding:"50px 16px 24px"}}>
+
+                {/* Header: Exit Button + Class Chip */}
                 <div className="row" style={{justifyContent:"space-between", marginBottom:14}}>
                   <button onClick={()=>{ setStep("login"); setPin(""); setStudentId(""); }} className="btn btn-ghost" style={{padding:"6px 10px"}}>
                     <Icon name="arrowLeft" size={12}/> ออก
@@ -796,7 +799,9 @@ const StudentMobile = ({activeClass}) => {
                   <span className="class-chip"><span className="class-chip-sq" style={{background:cls.color}}></span>{cls.name}</span>
                 </div>
 
+                {/* Dashboard Header Card with Gradient */}
                 <div style={{padding:20, borderRadius:20, background:"linear-gradient(135deg, " + cls.color + " 0%, " + cls.color + "dd 100%)", color:"#fff", marginBottom:16, boxShadow:"0 10px 28px rgba(79,70,229,.2)"}}>
+                  {/* Student Info Row */}
                   <div className="row" style={{gap:14}}>
                     <Avatar color="#fff" label={s.name.slice(0,1)} size={56}/>
                     <div style={{flex:1}}>
@@ -804,18 +809,25 @@ const StudentMobile = ({activeClass}) => {
                       <div className="text-sm" style={{opacity:.85, marginTop:2, fontSize:13}}>เลขที่ {s.no} · {cls.name}</div>
                     </div>
                   </div>
+
+                  {/* Stats Section with Dividers */}
                   <div className="row" style={{justifyContent:"space-between", marginTop:18, paddingTop:16, borderTop:"1px solid rgba(255,255,255,.25)", gap:12}}>
+                    {/* Score Stat */}
                     <div style={{textAlign:"center", flex:1}}>
                       <div className="num bold" style={{fontSize:26}}>{total}</div>
                       <div className="text-sm" style={{opacity:.85, marginTop:4, fontSize:12}}>คะแนน</div>
                       <div className="text-sm" style={{opacity:.7, fontSize:11}}>{maxTotal}</div>
                     </div>
                     <div style={{width:"1px", background:"rgba(255,255,255,.2)"}}></div>
+
+                    {/* Grade Stat (Color-coded) */}
                     <div style={{textAlign:"center", flex:1}}>
                       <div className="num bold" style={{fontSize:32, letterSpacing:-1, color:grade==="A"?"#84CC16":grade==="B"?"#10B981":grade==="C"?"#F59E0B":grade==="D"?"#F97316":"#EF4444"}}>{grade}</div>
                       <div className="text-sm" style={{opacity:.85, marginTop:4, fontSize:12}}>เกรด</div>
                     </div>
                     <div style={{width:"1px", background:"rgba(255,255,255,.2)"}}></div>
+
+                    {/* Attendance Stat */}
                     <div style={{textAlign:"center", flex:1}}>
                       <div className="num bold" style={{fontSize:26}}>{attPct}%</div>
                       <div className="text-sm" style={{opacity:.85, marginTop:4, fontSize:12}}>เข้าเรียน</div>
@@ -823,6 +835,7 @@ const StudentMobile = ({activeClass}) => {
                   </div>
                 </div>
 
+                {/* Score Cards Section */}
                 <div className="card" style={{marginBottom:12}}>
                   <div className="bold text-sm" style={{marginBottom:10}}>คะแนนของฉัน</div>
                   {cats.map(c => (
@@ -836,6 +849,7 @@ const StudentMobile = ({activeClass}) => {
                   ))}
                 </div>
 
+                {/* Attendance Section */}
                 <div className="card">
                   <div className="bold text-sm" style={{marginBottom:10}}>การเข้าเรียน</div>
                   <div style={{display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:6}}>
@@ -855,6 +869,7 @@ const StudentMobile = ({activeClass}) => {
           </div>
         </div>
 
+        {/* Usage Guide */}
         <div className="col" style={{maxWidth:340}}>
           <div className="card card-pad-lg">
             <div className="bold text-lg" style={{marginBottom:8}}>วิธีใช้ของนักเรียน</div>
