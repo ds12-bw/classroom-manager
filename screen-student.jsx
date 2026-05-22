@@ -682,6 +682,7 @@ const QRPage = ({activeClass, setActiveClass}) => {
   );
 };
 
+// StudentMobile component — Student login + dashboard view
 const StudentMobile = ({activeClass}) => {
   const store = window.useStore();
   const cls = store.classes.find(c => c.id === activeClass) || store.classes[0];
@@ -903,5 +904,3 @@ const StudentMobile = ({activeClass}) => {
     </div>
   );
 };
-
-Object.assign(window, {StudentDetail, QRPage, StudentMobile, ImportModal});
