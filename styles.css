@@ -257,17 +257,23 @@ button{ font-family: inherit; cursor:pointer; border:none; background:none; colo
 
 /* Mobile frame */
 .phone-frame{
-  width: 480px; height: 960px;
+  width: 90vw;
+  height: 90vh;
+  max-width: 600px;
+  max-height: 1200px;
   background: #1E1B2E;
   border-radius: 44px;
   padding: 12px;
   box-shadow: var(--shadow-lg);
-  margin: 0 auto;
+  margin: auto;
 }
 /* QR mode: full screen on mobile devices */
 @media (max-width: 768px) {
   .phone-frame{
-    width: 100vw; height: 100vh;
+    width: 100vw;
+    height: 100vh;
+    max-width: 100%;
+    max-height: 100%;
     border-radius: 0;
     padding: 0;
     margin: 0;
