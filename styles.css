@@ -256,40 +256,29 @@ button{ font-family: inherit; cursor:pointer; border:none; background:none; colo
 .class-chip-sq{ width:18px; height:18px; border-radius: 5px; }
 
 /* Mobile frame */
+/* Mobile frame - Full screen on phone */
 .phone-frame{
-  width: 90vw;
-  height: 90vh;
-  max-width: 600px;
-  max-height: 1200px;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
   background: #1E1B2E;
-  border-radius: 44px;
-  padding: 12px;
-  box-shadow: var(--shadow-lg);
-  margin: auto;
-}
-/* QR mode: full screen on mobile devices */
-@media (max-width: 768px) {
-  .phone-frame{
-    width: 100vw;
-    height: 100vh;
-    max-width: 100%;
-    max-height: 100%;
-    border-radius: 0;
-    padding: 0;
-    margin: 0;
-  }
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
 }
 .phone-screen{
-  width:100%; height:100%;
+  width: 100%;
+  height: 100%;
   background: #FFF;
-  border-radius: 32px;
-  overflow:auto;
-  position:relative;
+  border-radius: 0;
+  overflow: auto;
+  position: relative;
 }
 .phone-notch{
-  position:absolute; top:8px; left:50%; transform: translateX(-50%);
-  width: 110px; height: 28px; border-radius: 999px;
-  background: #1E1B2E; z-index:2;
+  display: none;
 }
 
 /* Scrollbar */

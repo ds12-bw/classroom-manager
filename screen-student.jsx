@@ -756,25 +756,15 @@ const StudentMobile = ({activeClass}) => {
                 <div className="card" style={{marginTop:32, width:"100%", padding:16}}>
                   <div className="text-sm bold" style={{marginBottom:6}}>กรอกเลขประจำตัวนักเรียน</div>
                   <div className="muted text-sm" style={{marginBottom:12}}>ใส่เลขประจำตัวที่ครูกำหนดให้</div>
-                  <input className="input num" style={{width:"100%", fontSize:18, letterSpacing:2, textAlign:"center", borderColor: loginError ? "#EF4444" : undefined}}
-                    placeholder="เช่น 6500001"
+                  <input className="input num" style={{width:"100%", fontSize:24, letterSpacing:3, textAlign:"center", borderColor: loginError ? "#EF4444" : undefined, padding:"16px 12px", fontWeight:"700"}}
+                    placeholder="กรอกเลขประจำตัว"
                     value={pin}
                     onChange={e=>{ setPin(e.target.value); setLoginError(""); }}
-                    onKeyDown={e=>{ if(e.key==="Enter") tryLogin(); }}/>
+                    onKeyDown={e=>{ if(e.key==="Enter") tryLogin(); }}
+                    autoFocus/>
                   {loginError && (
                     <div style={{marginTop:8, padding:"8px 10px", background:"#FEE2E2", color:"#991B1B", borderRadius:8, fontSize:12, textAlign:"center"}}>
                       {loginError}
-                    </div>
-                  )}
-                  {classRoster.length > 0 && (
-                    <div style={{marginTop:10}}>
-                      <div className="muted text-sm" style={{marginBottom:6}}>ตัวอย่างเลขนักเรียนในห้อง {cls.name}</div>
-                      <div className="row" style={{flexWrap:"wrap", gap:6, justifyContent:"center"}}>
-                        {classRoster.slice(0,4).map(s=>(
-                          <button key={s.id} className="badge" style={{background:"var(--primary-soft)", color:"var(--primary-ink)", cursor:"pointer"}}
-                            onClick={()=>{ setPin(s.id); setLoginError(""); }}>{s.id} ({s.name})</button>
-                        ))}
-                      </div>
                     </div>
                   )}
                   <button className="btn btn-primary" style={{width:"100%", marginTop:16, justifyContent:"center"}}
