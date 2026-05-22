@@ -29,6 +29,9 @@ function App(){
     }
   }, [store.loaded, store.students.length, store.classes.length]);
 
+  // Detect if opened from QR scan (has ?class param)
+  const [isQRMode, setIsQRMode] = useStateApp(false);
+
   // Handle scanned QR URL: ?class=<id> auto-opens the student mobile login for that class
   React.useEffect(() => {
     if (!store.loaded) return;
@@ -37,6 +40,7 @@ function App(){
     if (classParam && store.classes.find(c => c.id === classParam)){
       setActiveClass(classParam);
       setActive("studentmobile");
+      setIsQRMode(true); // ← Hide nav/sidebar
     }
   }, [store.loaded]);
 
@@ -84,10 +88,11 @@ function App(){
   return (
     <>
       <div className={"app" + (t.layout === "top" ? " top-nav" : "")} data-screen-label={active}>
-        {t.layout === "sidebar"
-          ? <window.Sidebar active={active} onNav={nav} onImport={openImport}/>
-          : <window.TopNav active={active} onNav={nav} onImport={openImport}/>
-        }
+        {!isQRMode && (
+          t.layout === "sidebar"
+            ? <window.Sidebar active={active} onNav={nav} onImport={openImport}/>
+            : <window.TopNav active={active} onNav={nav} onImport={openImport}/>
+        )}
         {screen}
 
         {active === "qr" && (
@@ -100,7 +105,7 @@ function App(){
 
       {importing && <window.ImportModal onClose={()=>{setImporting(null); setImportClassId(null);}} kind={importing} targetClassId={importClassId}/>}
 
-      <window.TweaksPanel title="Tweaks">
+      {!isQRMode && <window.TweaksPanel title="Tweaks">
         <window.TweakSection label="Layout">
           <window.TweakRadio
             label="แนวการนำทาง"
@@ -159,6 +164,7 @@ function App(){
           </button>
         </window.TweakSection>
       </window.TweaksPanel>
+      }
     </>
   );
 }
