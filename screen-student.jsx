@@ -881,26 +881,76 @@ const StudentMobile = ({activeClass}) => {
                   </div>
                 </div>
 
-                {/* Recent Assignments Section */}
-                <div className="card" style={{background:"#1E293B", border:"1px solid rgba(148, 163, 184, 0.15)", padding:"36px", marginBottom:0}}>
-                  <div className="bold text-sm" style={{marginBottom:26, fontSize:24, color:"#F1F5F9"}}>📝 งานล่าสุด</div>
-                  <div style={{display:"flex", flexDirection:"column", gap:18}}>
-                    {[
-                      {title:"โครงร่างเรียงความ", due:"3 วันข้างหน้า", status:"pending", icon:"⏳", color:"#F59E0B"},
-                      {title:"ทดสอบเนื้อหาบทที่ 5", due:"เสร็จแล้ว", status:"done", icon:"✅", color:"#10B981"},
-                      {title:"ส่งรายงานการสำรวจ", due:"5 วันข้างหน้า", status:"pending", icon:"⏳", color:"#F59E0B"},
-                    ].map((item, i) => (
-                      <div key={i} style={{padding:"20px 24px", background:"rgba(148, 163, 184, 0.1)", borderRadius:18, border:`2px solid ${item.color}40`, display:"flex", alignItems:"center", gap:18}}>
-                        <div style={{fontSize:28}}>{item.icon}</div>
-                        <div style={{flex:1}}>
-                          <div className="bold" style={{fontSize:19, color:"#E2E8F0", marginBottom:8}}>{item.title}</div>
-                          <div style={{fontSize:16, color:"#94A3B8"}}>{item.due}</div>
+                {/* Recent Assignments Section - Real Data from Store */}
+                {(() => {
+                  // Get assignments for this class from store.notes
+                  const assignments = (store.notes[cls.id] || [])
+                    .filter(n => n.kind === "assignment")
+                    .sort((a, b) => new Date(a.due_date || "2099-12-31") - new Date(b.due_date || "2099-12-31"))
+                    .slice(0, 5)  // Show top 5 assignments
+                    .map(note => {
+                      const dueDate = note.due_date ? new Date(note.due_date) : null;
+                      const today = new Date();
+                      today.setHours(0, 0, 0, 0);
+                      let dueDateStr = "ไม่มีกำหนด";
+                      let status = "done";
+                      let icon = "✅";
+                      let color = "#10B981";
+
+                      if (dueDate) {
+                        const diffDays = Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
+                        if (diffDays > 0) {
+                          dueDateStr = diffDays === 1 ? "พรุ่งนี้" : `${diffDays} วันข้างหน้า`;
+                          status = "pending";
+                          icon = "⏳";
+                          color = "#F59E0B";
+                        } else if (diffDays === 0) {
+                          dueDateStr = "วันนี้";
+                          status = "pending";
+                          icon = "🔴";
+                          color = "#EF4444";
+                        } else {
+                          dueDateStr = `เลยกำหนด ${Math.abs(diffDays)} วัน`;
+                          status = "overdue";
+                          icon = "❌";
+                          color = "#EF4444";
+                        }
+                      }
+
+                      return {
+                        title: note.text.split('\n')[0].substring(0, 50),  // First line, max 50 chars
+                        due: dueDateStr,
+                        status,
+                        icon,
+                        color,
+                        fullText: note.text
+                      };
+                    });
+
+                  return (
+                    <div className="card" style={{background:"#1E293B", border:"1px solid rgba(148, 163, 184, 0.15)", padding:"36px", marginBottom:0}}>
+                      <div className="bold text-sm" style={{marginBottom:26, fontSize:24, color:"#F1F5F9"}}>📝 งานล่าสุด</div>
+                      {assignments.length === 0 ? (
+                        <div style={{textAlign:"center", padding:"40px 20px", color:"#64748B", fontSize:17}}>ไม่มีงานค้าง</div>
+                      ) : (
+                        <div style={{display:"flex", flexDirection:"column", gap:18}}>
+                          {assignments.map((item, i) => (
+                            <div key={i} style={{padding:"20px 24px", background:"rgba(148, 163, 184, 0.1)", borderRadius:18, border:`2px solid ${item.color}40`, display:"flex", alignItems:"center", gap:18}}>
+                              <div style={{fontSize:28}}>{item.icon}</div>
+                              <div style={{flex:1}}>
+                                <div className="bold" style={{fontSize:19, color:"#E2E8F0", marginBottom:8}}>{item.title}</div>
+                                <div style={{fontSize:16, color:"#94A3B8"}}>{item.due}</div>
+                              </div>
+                              <div style={{fontSize:14, fontWeight:600, color:item.color, padding:"8px 14px", background:item.color + "20", borderRadius:12}}>
+                                {item.status === "pending" ? "ค้าง" : item.status === "overdue" ? "เลย" : "เสร็จ"}
+                              </div>
+                            </div>
+                          ))}
                         </div>
-                        <div style={{fontSize:14, fontWeight:600, color:item.color, padding:"8px 14px", background:item.color + "20", borderRadius:12}}>{item.status === "pending" ? "ค้าง" : "เสร็จ"}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                      )}
+                    </div>
+                  );
+                })()}
               </div>
             )}
           </div>
