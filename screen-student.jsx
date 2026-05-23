@@ -694,10 +694,7 @@ const StudentMobile = ({activeClass}) => {
   const s = store.students.find(x => x.id === studentId);
   const cats = store.categories;
   const sc = store.scores[s?.id] || {};
-  const maxTotal = window.maxTotal();
-  const total = cats.reduce((a,c) => a+(sc[c.key]||0), 0);
-  const pct = maxTotal ? (total/maxTotal)*100 : 0;
-  const grade = window.gradeFor(pct);
+  const maxTotal = window.maxTotal() + 10;
 
   const att = (() => {
     const c = {present:0, absent:0, leave:0, skip:0};
@@ -710,6 +707,11 @@ const StudentMobile = ({activeClass}) => {
   })();
   const attTotal = att.present + att.absent + att.leave + att.skip;
   const attPct = attTotal ? Math.round((att.present / attTotal) * 100) : 0;
+  const attendScore = Math.round((attPct / 100) * 10);
+
+  const total = cats.reduce((a,c) => a+(sc[c.key]||0), 0) + attendScore;
+  const pct = maxTotal ? (total/maxTotal)*100 : 0;
+  const grade = window.gradeFor(pct);
 
   const tryLogin = () => {
     const found = store.students.find(s => s.id === pin && s.classId === cls.id);
@@ -848,12 +850,13 @@ const StudentMobile = ({activeClass}) => {
                       <Bar value={sc[c.key]||0} max={c.max} color={c.color}/>
                     </div>
                   ))}
-                  <div style={{marginTop:12, paddingTop:12, borderTop:"1px solid var(--line)"}}>
+                  <div style={{marginTop:10, paddingTop:10, borderTop:"1px solid var(--line)"}}>
                     <div className="row" style={{justifyContent:"space-between", fontSize:12, marginBottom:4}}>
                       <span style={{whiteSpace:"nowrap"}}>✓ เช็คชื่อ</span>
-                      <span className="num bold" style={{whiteSpace:"nowrap", color:"#10B981"}}>{attPct}<span className="muted">%</span></span>
+                      <span className="num bold" style={{whiteSpace:"nowrap", color:"#10B981"}}>{attendScore}<span className="muted"> / 10</span></span>
                     </div>
-                    <Bar value={attPct} max={100} color="#10B981"/>
+                    <Bar value={attendScore} max={10} color="#10B981"/>
+                    <div className="muted text-sm" style={{marginTop:4, fontSize:10}}>({attPct}% เข้าเรียน)</div>
                   </div>
                 </div>
 
