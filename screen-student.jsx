@@ -754,8 +754,8 @@ const StudentMobile = ({activeClass}) => {
                   <div className="muted text-sm" style={{marginBottom:14, fontSize:12}}>ใส่เลขที่ครูกำหนดให้เพื่อดูข้อมูล</div>
 
                   <input className="input num"
-                    style={{width:"100%", fontSize:28, letterSpacing:4, textAlign:"center", borderColor: loginError ? "#EF4444" : "var(--line)", borderWidth: loginError ? 2 : 1, padding:"18px 14px", fontWeight:"700", background:"#fff"}}
-                    placeholder="กรอกเลข"
+                    style={{width:"100%", fontSize:32, letterSpacing:6, textAlign:"center", borderColor: loginError ? "#EF4444" : "#E5E7EB", borderWidth: 2, borderRadius: 12, padding:"20px 16px", fontWeight:"700", background:"#fff", boxShadow: loginError ? "0 0 0 3px rgba(239, 68, 68, 0.1)" : "0 2px 8px rgba(0,0,0,0.06)"}}
+                    placeholder="0000"
                     value={pin}
                     onChange={e=>{ setPin(e.target.value); setLoginError(""); }}
                     onKeyDown={e=>{ if(e.key==="Enter") tryLogin(); }}
@@ -770,7 +770,7 @@ const StudentMobile = ({activeClass}) => {
 
                   {/* Login Button */}
                   <button className="btn btn-primary"
-                    style={{width:"100%", marginTop:20, justifyContent:"center", padding:"12px 16px", fontSize:14, fontWeight:600, boxShadow:"0 6px 16px rgba(79,70,229,.3)"}}
+                    style={{width:"100%", marginTop:24, justifyContent:"center", padding:"16px 20px", fontSize:16, fontWeight:700, boxShadow:"0 8px 20px rgba(79,70,229,.35)", borderRadius: 12, transition: "all 200ms ease", opacity: !pin.trim() ? 0.6 : 1}}
                     disabled={!pin.trim()}
                     onClick={tryLogin}>
                     เข้าสู่ระบบ
@@ -794,7 +794,7 @@ const StudentMobile = ({activeClass}) => {
               </div>
             ) : (
               // ===== DASHBOARD SCREEN (Modern & Vibrant) =====
-              <div style={{padding:"50px 16px 24px"}}>
+              <div style={{padding:"56px 18px 28px"}}>
 
                 {/* Header: Exit Button + Class Chip */}
                 <div className="row" style={{justifyContent:"space-between", marginBottom:14}}>
@@ -805,13 +805,13 @@ const StudentMobile = ({activeClass}) => {
                 </div>
 
                 {/* Dashboard Header Card with Gradient */}
-                <div style={{padding:20, borderRadius:20, background:"linear-gradient(135deg, " + cls.color + " 0%, " + cls.color + "dd 100%)", color:"#fff", marginBottom:16, boxShadow:"0 10px 28px rgba(79,70,229,.2)"}}>
+                <div style={{padding:24, borderRadius:24, background:"linear-gradient(135deg, " + cls.color + " 0%, " + cls.color + "dd 100%)", color:"#fff", marginBottom:18, boxShadow:"0 12px 32px rgba(79,70,229,.25)"}}>
                   {/* Student Info Row */}
-                  <div className="row" style={{gap:14}}>
-                    <Avatar color="#fff" label={s.name.slice(0,1)} size={56}/>
+                  <div className="row" style={{gap:16, alignItems:"center"}}>
+                    <Avatar color="#fff" label={s.name.slice(0,1)} size={64}/>
                     <div style={{flex:1}}>
-                      <div className="bold" style={{fontSize:18, letterSpacing:-0.5}}>{s.name} {s.surname}</div>
-                      <div className="text-sm" style={{opacity:.85, marginTop:2, fontSize:13}}>เลขที่ {s.no} · {cls.name}</div>
+                      <div className="bold" style={{fontSize:20, letterSpacing:-0.5, lineHeight:1.3}}>{s.name} {s.surname}</div>
+                      <div className="text-sm" style={{opacity:.85, marginTop:4, fontSize:13}}>เลขที่ {s.no} · {cls.name}</div>
                     </div>
                   </div>
 
@@ -841,37 +841,37 @@ const StudentMobile = ({activeClass}) => {
                 </div>
 
                 {/* Score Cards Section */}
-                <div className="card" style={{marginBottom:12}}>
-                  <div className="bold text-sm" style={{marginBottom:10, paddingBottom:8}}>คะแนนของฉัน</div>
+                <div className="card" style={{marginBottom:14, background:"linear-gradient(to bottom, rgba(79,70,229,0.02) 0%, transparent 100%)"}}>
+                  <div className="bold text-sm" style={{marginBottom:14, paddingBottom:12, borderBottom:"2px solid rgba(79,70,229,0.1)", fontSize:14}}> 📊 คะแนนของฉัน</div>
                   {cats.map(c => (
-                    <div key={c.key} style={{marginBottom:10}}>
-                      <div className="row" style={{justifyContent:"space-between", fontSize:12, marginBottom:4}}>
-                        <span style={{whiteSpace:"nowrap"}}>{c.label}</span>
-                        <span className="num bold" style={{whiteSpace:"nowrap"}}>{sc[c.key]||0}<span className="muted"> / {c.max}</span></span>
+                    <div key={c.key} style={{marginBottom:12, paddingBottom:8}}>
+                      <div className="row" style={{justifyContent:"space-between", fontSize:13, marginBottom:6}}>
+                        <span style={{whiteSpace:"nowrap", fontWeight:500}}>{c.label}</span>
+                        <span className="num bold" style={{whiteSpace:"nowrap", fontSize:14, color:c.color}}>{sc[c.key]||0}<span className="muted" style={{fontSize:12}}> / {c.max}</span></span>
                       </div>
                       <Bar value={sc[c.key]||0} max={c.max} color={c.color}/>
                     </div>
                   ))}
-                  <div style={{marginTop:12, paddingTop:12, borderTop:"1px solid var(--line)"}}>
-                    <div className="row" style={{justifyContent:"space-between", fontSize:12, marginBottom:4}}>
-                      <span style={{whiteSpace:"nowrap"}}>✓ เช็คชื่อ</span>
-                      <span className="num bold" style={{whiteSpace:"nowrap", color:"#10B981"}}>{attendScore}<span className="muted"> / 10</span></span>
+                  <div style={{marginTop:14, paddingTop:14, borderTop:"2px solid rgba(79,70,229,0.1)"}}>
+                    <div className="row" style={{justifyContent:"space-between", fontSize:13, marginBottom:6}}>
+                      <span style={{whiteSpace:"nowrap", fontWeight:500}}>✓ เช็คชื่อ</span>
+                      <span className="num bold" style={{whiteSpace:"nowrap", fontSize:14, color:"#10B981"}}>{attendScore}<span className="muted" style={{fontSize:12}}> / 10</span></span>
                     </div>
                     <Bar value={attendScore} max={10} color="#10B981"/>
-                    <div className="muted text-sm" style={{marginTop:4, fontSize:10}}>({attPct}% เข้าเรียน)</div>
+                    <div className="muted text-sm" style={{marginTop:6, fontSize:11, color:"#6B7280"}}>({attPct}% เข้าเรียน)</div>
                   </div>
                 </div>
 
                 {/* Attendance Section */}
                 <div className="card">
-                  <div className="bold text-sm" style={{marginBottom:10}}>การเข้าเรียน</div>
-                  <div style={{display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:6}}>
+                  <div className="bold text-sm" style={{marginBottom:14, fontSize:14}}>📋 การเข้าเรียน</div>
+                  <div style={{display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:10}}>
                     {Object.entries(att).map(([k,v]) => {
                       const st = window.ATT_STATUS[k];
                       return (
-                        <div key={k} style={{padding:10, borderRadius:10, background:st.bg, textAlign:"center"}}>
-                          <div className="num bold" style={{color:st.color, fontSize:18}}>{v}</div>
-                          <div style={{fontSize:11, color:st.color, fontWeight:600}}>{st.label}</div>
+                        <div key={k} style={{padding:14, borderRadius:14, background:st.bg, textAlign:"center", boxShadow:"0 2px 8px rgba(0,0,0,0.06)", transition:"all 200ms ease"}}>
+                          <div className="num bold" style={{color:st.color, fontSize:20, lineHeight:1.2}}>{v}</div>
+                          <div style={{fontSize:12, color:st.color, fontWeight:600, marginTop:6}}>{st.label}</div>
                         </div>
                       );
                     })}
