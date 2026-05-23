@@ -735,26 +735,26 @@ const StudentMobile = ({activeClass}) => {
           <div className="phone-screen">
             <div className="phone-notch"></div>
             {step === "login" ? (
-              // ===== LOGIN SCREEN (Modern & Vibrant) =====
-              <div style={{padding:"64px 24px 28px", display:"flex", flexDirection:"column", alignItems:"center", height:"100%", background:"linear-gradient(135deg, rgba(79,70,229,.04) 0%, rgba(10,185,209,.04) 100%)"}}>
+              // ===== LOGIN SCREEN (Dark Mode Elegant - SCALED UP) =====
+              <div style={{padding:"80px 32px 40px", display:"flex", flexDirection:"column", alignItems:"center", height:"100%", background:"linear-gradient(135deg, #0F172A 0%, #1E293B 100%)"}}>
 
-                {/* Class Avatar with Gradient */}
-                <div style={{width:88, height:88, borderRadius:20, background:"linear-gradient(135deg, " + cls.color + " 0%, " + cls.color + "dd 100%)", display:"flex", alignItems:"center", justifyContent:"center", color:"#fff", fontFamily:"var(--font-num)", fontWeight:700, fontSize:32, marginTop:20, boxShadow:"0 8px 24px rgba(79,70,229,.25)"}}>
+                {/* Class Avatar with Gradient - LARGER */}
+                <div style={{width:128, height:128, borderRadius:32, background:"linear-gradient(135deg, " + cls.color + " 0%, " + cls.color + "dd 100%)", display:"flex", alignItems:"center", justifyContent:"center", color:"#fff", fontFamily:"var(--font-num)", fontWeight:700, fontSize:48, marginTop:12, boxShadow:"0 20px 50px rgba(0,0,0,.4)"}}>
                   {cls.code.split("-")[0].slice(0,2)}
                 </div>
 
-                {/* Class Info */}
-                <div className="bold" style={{marginTop:24, fontSize:20, letterSpacing:-0.5}}>{cls.name}</div>
-                <div className="muted text-sm" style={{marginTop:4, fontSize:13}}>เช็คคะแนน · การเข้าเรียน</div>
-                <div className="divider" style={{width:"70%", marginTop:20, marginBottom:0}}></div>
+                {/* Class Info - LARGER FONTS */}
+                <div className="bold" style={{marginTop:32, fontSize:28, letterSpacing:-0.5, textAlign:"center", color:"#F1F5F9"}}>{cls.name}</div>
+                <div className="muted text-sm" style={{marginTop:8, fontSize:16, textAlign:"center", color:"#CBD5E1"}}>เช็คคะแนน · การเข้าเรียน</div>
+                <div className="divider" style={{width:"80%", marginTop:28, marginBottom:0, background:"rgba(148, 163, 184, 0.2)"}}></div>
 
-                {/* Login Card */}
-                <div className="card" style={{marginTop:24, width:"100%", padding:24, boxShadow:"var(--shadow-md)", borderColor: loginError ? "#FCA5A5" : "var(--line)"}}>
-                  <div className="bold" style={{marginBottom:8, fontSize:15}}>เลขประจำตัวของคุณ</div>
-                  <div className="muted text-sm" style={{marginBottom:14, fontSize:12}}>ใส่เลขที่ครูกำหนดให้เพื่อดูข้อมูล</div>
+                {/* Login Card - BIGGER PADDING */}
+                <div className="card" style={{marginTop:36, width:"100%", padding:36, boxShadow:"0 20px 40px rgba(0,0,0,.5)", borderColor: loginError ? "#FCA5A5" : "#334155", borderRadius:24, background:"#1E293B"}}>
+                  <div className="bold" style={{marginBottom:12, fontSize:19, color:"#F1F5F9"}}>เลขประจำตัวของคุณ</div>
+                  <div className="muted text-sm" style={{marginBottom:22, fontSize:15, color:"#94A3B8"}}>ใส่เลขที่ครูกำหนดให้เพื่อดูข้อมูล</div>
 
                   <input className="input num"
-                    style={{width:"100%", fontSize:32, letterSpacing:6, textAlign:"center", borderColor: loginError ? "#EF4444" : "#E5E7EB", borderWidth: 2, borderRadius: 12, padding:"20px 16px", fontWeight:"700", background:"#fff", boxShadow: loginError ? "0 0 0 3px rgba(239, 68, 68, 0.1)" : "0 2px 8px rgba(0,0,0,0.06)"}}
+                    style={{width:"100%", fontSize:40, letterSpacing:8, textAlign:"center", borderColor: loginError ? "#EF4444" : "#475569", borderWidth: 2, borderRadius: 14, padding:"24px 18px", fontWeight:"700", background:"#0F172A", color:"#F1F5F9", boxShadow: loginError ? "0 0 0 3px rgba(239, 68, 68, 0.15)" : "0 4px 12px rgba(0,0,0,0.3)"}}
                     placeholder="0000"
                     value={pin}
                     onChange={e=>{ setPin(e.target.value); setLoginError(""); }}
@@ -763,14 +763,14 @@ const StudentMobile = ({activeClass}) => {
 
                   {/* Error Message */}
                   {loginError && (
-                    <div style={{marginTop:10, padding:"10px 12px", background:"linear-gradient(135deg, #FEE2E2 0%, #FEF2F2 100%)", color:"#991B1B", borderRadius:10, fontSize:12, textAlign:"center", borderLeft:"3px solid #EF4444", fontWeight:500}}>
+                    <div style={{marginTop:16, padding:"14px 16px", background:"rgba(239, 68, 68, 0.15)", color:"#FCA5A5", borderRadius:14, fontSize:15, textAlign:"center", borderLeft:"4px solid #EF4444", fontWeight:500}}>
                       ❌ {loginError}
                     </div>
                   )}
 
-                  {/* Login Button */}
+                  {/* Login Button - BIGGER */}
                   <button className="btn btn-primary"
-                    style={{width:"100%", marginTop:24, justifyContent:"center", padding:"16px 20px", fontSize:16, fontWeight:700, boxShadow:"0 8px 20px rgba(79,70,229,.35)", borderRadius: 12, transition: "all 200ms ease", opacity: !pin.trim() ? 0.6 : 1}}
+                    style={{width:"100%", marginTop:28, justifyContent:"center", padding:"20px 24px", fontSize:18, fontWeight:700, boxShadow:"0 10px 30px rgba(59, 130, 246, .4)", borderRadius: 14, transition: "all 200ms ease", opacity: !pin.trim() ? 0.5 : 1, background: !pin.trim() ? "#1E40AF" : "#3B82F6"}}
                     disabled={!pin.trim()}
                     onClick={tryLogin}>
                     เข้าสู่ระบบ
@@ -778,11 +778,11 @@ const StudentMobile = ({activeClass}) => {
                 </div>
 
                 {/* Footer */}
-                <div className="muted text-sm" style={{marginTop:"auto", paddingTop:16, fontSize:11, textAlign:"center"}}>
-                  <div style={{display:"flex", alignItems:"center", justifyContent:"center", gap:6, marginBottom:2}}>
-                    🔒 <span style={{fontWeight:600}}>ปลอดภัย</span>
+                <div className="muted text-sm" style={{marginTop:"auto", paddingTop:24, fontSize:14, textAlign:"center"}}>
+                  <div style={{display:"flex", alignItems:"center", justifyContent:"center", gap:8, marginBottom:6, padding:"10px 18px", background:"rgba(16, 185, 129, 0.15)", borderRadius:24, width:"fit-content", margin:"0 auto 6px"}}>
+                    🔒 <span style={{fontWeight:600, color:"#6EE7B7"}}>ปลอดภัย</span>
                   </div>
-                  โดย ครูดิจิทัล
+                  <div style={{fontSize:13, color:"#64748B"}}>โดย ครูดิจิทัล</div>
                 </div>
               </div>
             ) : !s ? (
@@ -793,89 +793,97 @@ const StudentMobile = ({activeClass}) => {
                   onClick={()=>{ setStep("login"); setStudentId(""); setPin(""); }}>กลับ</button>
               </div>
             ) : (
-              // ===== DASHBOARD SCREEN (Modern & Vibrant) =====
-              <div style={{padding:"56px 18px 28px"}}>
+              // ===== DASHBOARD SCREEN (Dark Mode Elegant - SCALED UP) =====
+              <div style={{padding:"48px 22px 28px", background:"linear-gradient(135deg, #0F172A 0%, #1E293B 100%)"}}>
 
-                {/* Header: Exit Button + Class Chip */}
-                <div className="row" style={{justifyContent:"space-between", marginBottom:14}}>
-                  <button onClick={()=>{ setStep("login"); setPin(""); setStudentId(""); }} className="btn btn-ghost" style={{padding:"6px 10px"}}>
-                    <Icon name="arrowLeft" size={12}/> ออก
+                {/* Header: Exit Button + Class Chip - LARGER */}
+                <div className="row" style={{justifyContent:"space-between", marginBottom:22, alignItems:"center"}}>
+                  <button onClick={()=>{ setStep("login"); setPin(""); setStudentId(""); }} className="btn btn-ghost" style={{padding:"10px 16px", fontSize:15, fontWeight:500, color:"#6B7280"}}>
+                    <Icon name="arrowLeft" size={16}/> ออก
                   </button>
-                  <span className="class-chip"><span className="class-chip-sq" style={{background:cls.color}}></span>{cls.name}</span>
+                  <span className="class-chip" style={{padding:"8px 16px", fontSize:15, fontWeight:500}}><span className="class-chip-sq" style={{background:cls.color}}></span>{cls.name}</span>
                 </div>
 
-                {/* Dashboard Header Card with Gradient */}
-                <div style={{padding:24, borderRadius:24, background:"linear-gradient(135deg, " + cls.color + " 0%, " + cls.color + "dd 100%)", color:"#fff", marginBottom:18, boxShadow:"0 12px 32px rgba(79,70,229,.25)"}}>
-                  {/* Student Info Row */}
-                  <div className="row" style={{gap:16, alignItems:"center"}}>
-                    <Avatar color="#fff" label={s.name.slice(0,1)} size={64}/>
+                {/* Dashboard Header Card with Gradient - LARGER */}
+                <div style={{padding:32, borderRadius:32, background:"linear-gradient(135deg, #1E293B 0%, #334155 100%)", color:"#F1F5F9", marginBottom:24, boxShadow:"0 20px 40px rgba(0,0,0,.4)", border:"1px solid rgba(148, 163, 184, 0.2)"}}>
+                  {/* Student Info Row - LARGER */}
+                  <div className="row" style={{gap:20, alignItems:"center"}}>
+                    <Avatar color="#3B82F6" label={s.name.slice(0,1)} size={80}/>
                     <div style={{flex:1}}>
-                      <div className="bold" style={{fontSize:20, letterSpacing:-0.5, lineHeight:1.3}}>{s.name} {s.surname}</div>
-                      <div className="text-sm" style={{opacity:.85, marginTop:4, fontSize:13}}>เลขที่ {s.no} · {cls.name}</div>
+                      <div className="bold" style={{fontSize:26, letterSpacing:-0.5, lineHeight:1.3, color:"#F1F5F9"}}>{s.name} {s.surname}</div>
+                      <div className="text-sm" style={{opacity:.75, marginTop:8, fontSize:16, color:"#CBD5E1"}}>เลขที่ {s.no} · {cls.name}</div>
                     </div>
                   </div>
 
-                  {/* Stats Section with Dividers */}
-                  <div className="row" style={{justifyContent:"space-between", marginTop:18, paddingTop:16, borderTop:"1px solid rgba(255,255,255,.25)", gap:12}}>
+                  {/* Stats Section with Dividers - LARGER FONTS & SPACING */}
+                  <div className="row" style={{justifyContent:"space-between", marginTop:26, paddingTop:22, borderTop:"1.5px solid rgba(148, 163, 184, 0.2)", gap:16}}>
                     {/* Score Stat */}
                     <div style={{textAlign:"center", flex:1}}>
-                      <div className="num bold" style={{fontSize:26}}>{total}</div>
-                      <div className="text-sm" style={{opacity:.85, marginTop:4, fontSize:12}}>คะแนน</div>
-                      <div className="text-sm" style={{opacity:.7, fontSize:11}}>{maxTotal}</div>
+                      <div style={{fontSize:18, opacity:0.85, marginBottom:10}}>📊</div>
+                      <div className="num bold" style={{fontSize:32, color:"#F1F5F9"}}>{total}</div>
+                      <div className="text-sm" style={{opacity:.75, marginTop:8, fontSize:14, color:"#CBD5E1"}}>คะแนน</div>
+                      <div className="text-sm" style={{opacity:.55, fontSize:12, marginTop:4, color:"#94A3B8"}}>{maxTotal} เต็ม</div>
                     </div>
-                    <div style={{width:"1px", background:"rgba(255,255,255,.2)"}}></div>
+                    <div style={{width:"1.5px", background:"rgba(148, 163, 184, 0.2)"}}></div>
 
                     {/* Grade Stat (Color-coded) */}
                     <div style={{textAlign:"center", flex:1}}>
-                      <div className="num bold" style={{fontSize:32, letterSpacing:-1, color:grade==="A"?"#84CC16":grade==="B"?"#10B981":grade==="C"?"#F59E0B":grade==="D"?"#F97316":"#EF4444"}}>{grade}</div>
-                      <div className="text-sm" style={{opacity:.85, marginTop:4, fontSize:12}}>เกรด</div>
+                      <div style={{fontSize:18, opacity:0.85, marginBottom:10}}>⭐</div>
+                      <div className="num bold" style={{fontSize:40, letterSpacing:-1, color:grade==="A"?"#FBBF24":grade==="B"?"#6EE7B7":grade==="C"?"#FED7AA":grade==="D"?"#F87171":"#F87171"}}>{grade}</div>
+                      <div className="text-sm" style={{opacity:.75, marginTop:8, fontSize:14, color:"#CBD5E1"}}>เกรด</div>
                     </div>
-                    <div style={{width:"1px", background:"rgba(255,255,255,.2)"}}></div>
+                    <div style={{width:"1.5px", background:"rgba(148, 163, 184, 0.2)"}}></div>
 
                     {/* Attendance Stat */}
                     <div style={{textAlign:"center", flex:1}}>
-                      <div className="num bold" style={{fontSize:26}}>{attPct}%</div>
-                      <div className="text-sm" style={{opacity:.85, marginTop:4, fontSize:12}}>เข้าเรียน</div>
+                      <div style={{fontSize:18, opacity:0.85, marginBottom:10}}>✓</div>
+                      <div className="num bold" style={{fontSize:32, color:"#F1F5F9"}}>{attPct}%</div>
+                      <div className="text-sm" style={{opacity:.75, marginTop:8, fontSize:14, color:"#CBD5E1"}}>เข้าเรียน</div>
                     </div>
                   </div>
                 </div>
 
-                {/* Score Cards Section */}
-                <div className="card" style={{marginBottom:14, background:"linear-gradient(to bottom, rgba(79,70,229,0.02) 0%, transparent 100%)"}}>
-                  <div className="bold text-sm" style={{marginBottom:14, paddingBottom:12, borderBottom:"2px solid rgba(79,70,229,0.1)", fontSize:14}}> 📊 คะแนนของฉัน</div>
+                {/* Score Cards Section - SCALED UP */}
+                <div className="card" style={{marginBottom:20, background:"#1E293B", borderRadius:22, border:"1px solid rgba(148, 163, 184, 0.15)", padding:"24px"}}>
+                  <div className="bold text-sm" style={{marginBottom:20, paddingBottom:18, borderBottom:"2px solid rgba(148, 163, 184, 0.2)", fontSize:18, color:"#F1F5F9"}}> 📊 คะแนนของฉัน</div>
                   {cats.map(c => (
-                    <div key={c.key} style={{marginBottom:12, paddingBottom:8}}>
-                      <div className="row" style={{justifyContent:"space-between", fontSize:13, marginBottom:6}}>
-                        <span style={{whiteSpace:"nowrap", fontWeight:500}}>{c.label}</span>
-                        <span className="num bold" style={{whiteSpace:"nowrap", fontSize:14, color:c.color}}>{sc[c.key]||0}<span className="muted" style={{fontSize:12}}> / {c.max}</span></span>
+                    <div key={c.key} style={{marginBottom:18, paddingBottom:14}}>
+                      <div className="row" style={{justifyContent:"space-between", fontSize:16, marginBottom:10}}>
+                        <span style={{whiteSpace:"nowrap", fontWeight:500, color:"#E2E8F0", fontSize:17}}>{c.label}</span>
+                        <span className="num bold" style={{whiteSpace:"nowrap", fontSize:18, color:c.color, fontWeight:700}}>{sc[c.key]||0}<span className="muted" style={{fontSize:14, color:"#94A3B8"}}> / {c.max}</span></span>
                       </div>
                       <Bar value={sc[c.key]||0} max={c.max} color={c.color}/>
                     </div>
                   ))}
-                  <div style={{marginTop:14, paddingTop:14, borderTop:"2px solid rgba(79,70,229,0.1)"}}>
-                    <div className="row" style={{justifyContent:"space-between", fontSize:13, marginBottom:6}}>
-                      <span style={{whiteSpace:"nowrap", fontWeight:500}}>✓ เช็คชื่อ</span>
-                      <span className="num bold" style={{whiteSpace:"nowrap", fontSize:14, color:"#10B981"}}>{attendScore}<span className="muted" style={{fontSize:12}}> / 10</span></span>
+                  <div style={{marginTop:20, paddingTop:20, borderTop:"2px solid rgba(148, 163, 184, 0.2)"}}>
+                    <div className="row" style={{justifyContent:"space-between", fontSize:16, marginBottom:10}}>
+                      <span style={{whiteSpace:"nowrap", fontWeight:500, color:"#E2E8F0", fontSize:17}}>✓ เช็คชื่อ</span>
+                      <span className="num bold" style={{whiteSpace:"nowrap", fontSize:18, color:"#6EE7B7", fontWeight:700}}>{attendScore}<span className="muted" style={{fontSize:14, color:"#94A3B8"}}> / 10</span></span>
                     </div>
-                    <Bar value={attendScore} max={10} color="#10B981"/>
-                    <div className="muted text-sm" style={{marginTop:6, fontSize:11, color:"#6B7280"}}>({attPct}% เข้าเรียน)</div>
+                    <Bar value={attendScore} max={10} color="#6EE7B7"/>
+                    <div className="muted text-sm" style={{marginTop:10, fontSize:14, color:"#64748B"}}>({attPct}% เข้าเรียน)</div>
                   </div>
                 </div>
 
-                {/* Attendance Section */}
-                <div className="card">
-                  <div className="bold text-sm" style={{marginBottom:14, fontSize:14}}>📋 การเข้าเรียน</div>
-                  <div style={{display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:10}}>
+                {/* Attendance Section - MUCH LARGER BOXES */}
+                <div className="card" style={{background:"#1E293B", border:"1px solid rgba(148, 163, 184, 0.15)", padding:"24px"}}>
+                  <div className="bold text-sm" style={{marginBottom:20, fontSize:18, color:"#F1F5F9"}}>📋 การเข้าเรียน</div>
+                  <div style={{display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:16}}>
                     {Object.entries(att).map(([k,v]) => {
                       const st = window.ATT_STATUS[k];
                       return (
-                        <div key={k} style={{padding:14, borderRadius:14, background:st.bg, textAlign:"center", boxShadow:"0 2px 8px rgba(0,0,0,0.06)", transition:"all 200ms ease"}}>
-                          <div className="num bold" style={{color:st.color, fontSize:20, lineHeight:1.2}}>{v}</div>
-                          <div style={{fontSize:12, color:st.color, fontWeight:600, marginTop:6}}>{st.label}</div>
+                        <div key={k} style={{padding:22, borderRadius:20, background:st.bg + "22", textAlign:"center", boxShadow:"0 4px 12px rgba(0,0,0,0.2)", transition:"all 200ms ease", cursor:"pointer", border:`1px solid ${st.color}40`}}>
+                          <div className="num bold" style={{color:st.color, fontSize:32, lineHeight:1.2, fontWeight:700}}>{v}</div>
+                          <div style={{fontSize:16, color:st.color, fontWeight:600, marginTop:12}}>{st.label}</div>
                         </div>
                       );
                     })}
                   </div>
+                </div>
+
+                {/* Footer */}
+                <div style={{marginTop:"auto", paddingTop:28, textAlign:"center", borderTop:"1px solid rgba(148, 163, 184, 0.1)"}}>
+                  <div style={{fontSize:13, color:"#64748B"}}>ครูดิจิทัล © 2024</div>
                 </div>
               </div>
             )}

@@ -7,7 +7,9 @@
       "PowerShell($f = \"C:\\\\Users\\\\Administrator\\\\.claude\\\\projects\\\\C--student-sistem\\\\ccb330fb-1b7b-4d5e-88d3-073e9677c408\\\\tool-results\\\\webfetch-1779032682849-52488a.bin\"; $out = \"C:\\\\Users\\\\Administrator\\\\.claude\\\\projects\\\\C--student-sistem\\\\ccb330fb-1b7b-4d5e-88d3-073e9677c408\\\\tool-results\\\\design.tar\"; $in = [System.IO.File]::OpenRead\\($f\\); $gz = New-Object System.IO.Compression.GZipStream\\($in, [System.IO.Compression.CompressionMode]::Decompress\\); $os = [System.IO.File]::Create\\($out\\); $gz.CopyTo\\($os\\); $os.Close\\(\\); $gz.Close\\(\\); $in.Close\\(\\); Write-Output \\(\"Decompressed: {0} bytes\" -f \\(Get-Item $out\\).Length\\))",
       "PowerShell(Get-ChildItem \"C:\\\\student sistem\\\\design\" -Recurse | ForEach-Object { $_.FullName })",
       "PowerShell(python --version)",
-      "Bash(py -m http.server 8000)"
+      "Bash(py -m http.server 8000)",
+      "Bash(git add *)",
+      "Bash(git commit -m 'Update StudentMobile design with modern vibrant styling *)"
     ]
   }
 }
