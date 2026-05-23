@@ -183,6 +183,13 @@ const Gradebook = ({activeClass, setActiveClass, onNav, setActiveStudent}) => {
                         <div className="muted text-sm num" style={{fontWeight:500, textTransform:"none", letterSpacing:0, whiteSpace:"nowrap"}}>({c.max} คะแนน)</div>
                       </th>
                     ))}
+                    <th style={{width:96, textAlign:"center"}}>
+                      <div className="row" style={{gap:6, justifyContent:"center"}}>
+                        <span style={{width:8, height:8, borderRadius:2, background:"#10B981"}}></span>
+                        <span style={{whiteSpace:"nowrap"}}>✓ เช็คชื่อ</span>
+                      </div>
+                      <div className="muted text-sm num" style={{fontWeight:500, textTransform:"none", letterSpacing:0, whiteSpace:"nowrap"}}>(10 คะแนน)</div>
+                    </th>
                     <th style={{width:80, textAlign:"center"}}>รวม</th>
                     <th style={{width:70, textAlign:"center"}}>เกรด</th>
                   </tr>
@@ -240,6 +247,28 @@ const Gradebook = ({activeClass, setActiveClass, onNav, setActiveStudent}) => {
                             </td>
                           );
                         })}
+                        {(() => {
+                          const att = (() => {
+                            const c = {present:0, absent:0, leave:0, skip:0};
+                            const byDate = store.attendance[cls.id] || {};
+                            Object.values(byDate).forEach(dayMap => {
+                              const st = dayMap[s.id];
+                              if (st && c[st] !== undefined) c[st]++;
+                            });
+                            return c;
+                          })();
+                          const attTotal = att.present + att.absent + att.leave + att.skip;
+                          const attPct = attTotal ? Math.round((att.present / attTotal) * 100) : 0;
+                          const attendScore = Math.round((attPct / 100) * 10);
+                          return (
+                            <td style={{textAlign:"center", padding:6}}>
+                              <button style={{padding:"6px 10px", borderRadius:8, background:"#10B98110", color:"#10B981", fontWeight:600, minWidth:50}}
+                                className="num" title={`${attPct}% เข้าเรียน`}>
+                                {attendScore}
+                              </button>
+                            </td>
+                          );
+                        })()}
                         <td style={{textAlign:"center"}} className="num bold">{total}</td>
                         <td style={{textAlign:"center"}}>
                           <span style={{display:"inline-block", padding:"3px 10px", borderRadius:999, background:gradeColors[grade]+"20", color:gradeColors[grade], fontWeight:700, fontSize:12, fontFamily:"var(--font-num)"}}>{grade}</span>
