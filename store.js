@@ -8,7 +8,7 @@
   const state = {
     classes: [],
     students: [],
-    categories: [],
+    categories: {},   // [classId] = [{key, label, max, color, dueDate, description}]
     schedule: [],
     scores: {},       // [sid][catKey] = number
     attendance: {},   // [classId][dateISO][sid] = "present"|"absent"|"leave"|"skip"
@@ -75,9 +75,23 @@
     })));
     if (r.error) throw new Error("seed classes: " + r.error.message);
 
-    r = await c.from('score_categories').insert(window.SCORE_CATS.map((x, i) => ({
-      key: x.key, label: x.label, max: x.max, color: x.color, sort_order: i
-    })));
+    // Seed categories for each class
+    const categoryRows = [];
+    window.CLASSES.forEach(cls => {
+      window.SCORE_CATS.forEach((x, i) => {
+        categoryRows.push({
+          class_id: cls.id,
+          key: x.key,
+          label: x.label,
+          max: x.max,
+          color: x.color,
+          sort_order: i,
+          due_date: x.dueDate || null,
+          description: x.description || ''
+        });
+      });
+    });
+    r = await c.from('score_categories').insert(categoryRows);
     if (r.error) throw new Error("seed score_categories: " + r.error.message);
 
     const studentRows = window.STUDENTS.map(s => ({
@@ -94,7 +108,12 @@
     const scoreRows = [];
     window.STUDENTS.forEach(s => {
       window.SCORE_CATS.forEach(cat => {
-        scoreRows.push({ student_id: s.id, category_key: cat.key, value: s[cat.key] || 0 });
+        scoreRows.push({
+          student_id: s.id,
+          class_id: s.classId,
+          category_key: cat.key,
+          value: s[cat.key] || 0
+        });
       });
     });
     for (let i = 0; i < scoreRows.length; i += 200){
@@ -145,11 +164,18 @@
         students: stuList.filter(st => st.classId === x.id).length,
       }));
       s.students = stuList;
-      s.categories = categories.data.map(x => ({ key: x.key, label: x.label, max: x.max, color: x.color, dueDate: x.due_date, description: x.description || '' }));
+      // Index categories by classId
+      s.categories = {};
+      categories.data.forEach(x => {
+        const cid = x.class_id;
+        if (!s.categories[cid]) s.categories[cid] = [];
+        s.categories[cid].push({ key: x.key, label: x.label, max: x.max, color: x.color, dueDate: x.due_date, description: x.description || '' });
+      });
       s.scores = {};
       stuList.forEach(st => {
         s.scores[st.id] = {};
-        s.categories.forEach(cat => { s.scores[st.id][cat.key] = 0; });
+        const cats = s.categories[st.classId] || [];
+        cats.forEach(cat => { s.scores[st.id][cat.key] = 0; });
       });
       scores.data.forEach(r => {
         s.scores[r.student_id] = s.scores[r.student_id] || {};
@@ -189,29 +215,52 @@
   // ============================================================
   // Categories
   // ============================================================
-  function addCategory(label, max, color, dueDate, description){
+  function addCategory(classId, label, max, color, dueDate, description){
     const key = "c" + Date.now();
     const cat = { key, label, max, color: color || "#8B5CF6", dueDate: dueDate || null, description: description || '' };
     setStore(s => {
-      s.categories.push(cat);
-      s.students.forEach(st => { s.scores[st.id][key] = 0; });
+      s.categories[classId] = s.categories[classId] || [];
+      s.categories[classId].push(cat);
+      // Only initialize scores for students in this class
+      s.students.filter(st => st.classId === classId).forEach(st => {
+        s.scores[st.id] = s.scores[st.id] || {};
+        s.scores[st.id][key] = 0;
+      });
     });
-    sb().from('score_categories').insert({ key, label, max, color: cat.color, due_date: dueDate || null, description: description || '', sort_order: state.categories.length })
-      .then(r => { if (r.error) dbError('addCategory', r.error); });
+    const catCount = (state.categories[classId] || []).length;
+    sb().from('score_categories').insert({
+      class_id: classId,
+      key,
+      label,
+      max,
+      color: cat.color,
+      due_date: dueDate || null,
+      description: description || '',
+      sort_order: catCount
+    }).then(r => { if (r.error) dbError('addCategory', r.error); });
   }
-  function removeCategory(key){
+  function removeCategory(classId, key){
     setStore(s => {
-      s.categories = s.categories.filter(c => c.key !== key);
+      if (s.categories[classId]) {
+        s.categories[classId] = s.categories[classId].filter(c => c.key !== key);
+      }
       Object.keys(s.scores).forEach(sid => { delete s.scores[sid][key]; });
     });
-    sb().from('score_categories').delete().eq('key', key)
+    sb().from('score_categories').delete().eq('class_id', classId).eq('key', key)
       .then(r => { if (r.error) dbError('removeCategory', r.error); });
   }
   function updateScore(sid, key, value){
     setStore(s => { s.scores[sid] = s.scores[sid] || {}; s.scores[sid][key] = value; });
+    // Find student to get classId
+    const stu = state.students.find(s => s.id === sid);
+    const classId = stu ? stu.classId : null;
+    if (!classId) {
+      dbError('updateScore', 'student not found');
+      return;
+    }
     sb().from('scores').upsert(
-      { student_id: sid, category_key: key, value, updated_at: new Date().toISOString() },
-      { onConflict: 'student_id,category_key' }
+      { student_id: sid, class_id: classId, category_key: key, value, updated_at: new Date().toISOString() },
+      { onConflict: 'student_id,class_id,category_key' }
     ).then(r => { if (r.error) dbError('updateScore', r.error); });
   }
 
@@ -238,7 +287,8 @@
         };
         s.students.push(stu);
         s.scores[stu.id] = {};
-        s.categories.forEach(c => { s.scores[stu.id][c.key] = 0; });
+        const cats = s.categories[stu.classId] || [];
+        cats.forEach(c => { s.scores[stu.id][c.key] = 0; });
         inserted.push(stu);
       });
       const ci = s.classes.findIndex(c => c.id === cid);
@@ -254,9 +304,12 @@
       const r1 = await c.from('students').insert(rows);
       if (r1.error) return dbError('addStudents', r1.error);
       const scoreRows = [];
-      inserted.forEach(stu => state.categories.forEach(cat => {
-        scoreRows.push({ student_id: stu.id, category_key: cat.key, value: 0 });
-      }));
+      inserted.forEach(stu => {
+        const cats = state.categories[stu.classId] || [];
+        cats.forEach(cat => {
+          scoreRows.push({ student_id: stu.id, class_id: stu.classId, category_key: cat.key, value: 0 });
+        });
+      });
       if (scoreRows.length){
         const r2 = await c.from('scores').insert(scoreRows);
         if (r2.error) dbError('addStudents scores', r2.error);
@@ -499,14 +552,18 @@
   // ============================================================
   // Computed
   // ============================================================
-  function studentTotal(sid){
+  function studentTotal(sid, classId){
     const sc = state.scores[sid] || {};
-    return state.categories.reduce((sum, c) => sum + (sc[c.key] || 0), 0);
+    const cats = classId ? (state.categories[classId] || []) : Object.values(state.categories).flat();
+    return cats.reduce((sum, c) => sum + (sc[c.key] || 0), 0);
   }
-  function maxTotal(){ return state.categories.reduce((sum, c) => sum + c.max, 0); }
-  function studentGradePercent(sid){
-    const max = maxTotal();
-    return max ? (studentTotal(sid) / max) * 100 : 0;
+  function maxTotal(classId){
+    const cats = classId ? (state.categories[classId] || []) : Object.values(state.categories).flat();
+    return cats.reduce((sum, c) => sum + c.max, 0);
+  }
+  function studentGradePercent(sid, classId){
+    const max = maxTotal(classId);
+    return max ? (studentTotal(sid, classId) / max) * 100 : 0;
   }
 
   Object.assign(window, {

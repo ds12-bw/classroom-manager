@@ -692,9 +692,9 @@ const StudentMobile = ({activeClass}) => {
   const [loginError, setLoginError] = useState("");
 
   const s = store.students.find(x => x.id === studentId);
-  const cats = store.categories;
+  const cats = store.categories[cls.id] || [];
   const sc = !s ? {} : (store.scores[s.id] || {});
-  const maxTotal = window.maxTotal() + 10;
+  const maxTotal = window.maxTotal(cls.id) + 10;
 
   let att = {present:0, absent:0, leave:0, skip:0};
   let attPct = 0;

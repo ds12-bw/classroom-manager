@@ -13,11 +13,11 @@ const Gradebook = ({activeClass, setActiveClass, onNav, setActiveStudent}) => {
   const [newCatDueDate, setNewCatDueDate] = useState("");
   const [newCatDescription, setNewCatDescription] = useState("");
 
-  const cats = store.categories;
+  const cats = store.categories[cls.id] || [];
   const students = useMemo(() => store.students.filter(s => s.classId === cls.id).sort((a,b)=>a.no-b.no), [store.students, cls.id]);
   const scores = store.scores;
 
-  const maxTotal = window.maxTotal() + 10;
+  const maxTotal = window.maxTotal(cls.id) + 10;
 
   const totals = useMemo(() => {
     return students.map(s => {
@@ -57,7 +57,7 @@ const Gradebook = ({activeClass, setActiveClass, onNav, setActiveStudent}) => {
   const submitNewCat = () => {
     if (!newCatLabel.trim() || newCatMax <= 0) return;
     const color = CategoryColors[cats.length % CategoryColors.length];
-    window.addCategory(newCatLabel.trim(), parseInt(newCatMax), color, newCatDueDate, newCatDescription);
+    window.addCategory(cls.id, newCatLabel.trim(), parseInt(newCatMax), color, newCatDueDate, newCatDescription);
     setNewCatLabel("");
     setNewCatMax(10);
     setNewCatDueDate("");
@@ -198,7 +198,7 @@ const Gradebook = ({activeClass, setActiveClass, onNav, setActiveStudent}) => {
                           <span style={{width:8, height:8, borderRadius:2, background:c.color}}></span>
                           <span style={{whiteSpace:"nowrap"}}>{c.label}</span>
                           {cats.length > 1 && (
-                            <button onClick={()=>{ if(confirm(`ลบประเภท "${c.label}"?`)) window.removeCategory(c.key); }}
+                            <button onClick={()=>{ if(confirm(`ลบประเภท "${c.label}"?`)) window.removeCategory(cls.id, c.key); }}
                               style={{color:"var(--ink-3)", padding:2, fontSize:12, fontFamily:"sans-serif", lineHeight:1}}>×</button>
                           )}
                         </div>
