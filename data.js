@@ -96,10 +96,10 @@ const PERIODS = ["08:30","09:30","10:30","13:00","14:00"];
 const DAYS = ["จันทร์","อังคาร","พุธ","พฤหัสบดี","ศุกร์"];
 
 const SCORE_CATS = [
-  {key:"assignment", label:"งานเก็บ", max:25, color:"#4F46E5"},
-  {key:"quiz",       label:"สอบย่อย", max:20, color:"#0EA5E9"},
-  {key:"group",      label:"งานกลุ่ม", max:15, color:"#10B981"},
-  {key:"final",      label:"ปลายภาค", max:40, color:"#F59E0B"},
+  {key:"assignment", label:"งานเก็บ", max:25, color:"#4F46E5", dueDate:"2026-05-27", description:"ส่งงานเก็บแต่ละบท"},
+  {key:"quiz",       label:"สอบย่อย", max:20, color:"#0EA5E9", dueDate:"2026-05-30", description:"ทดสอบย่อยตามตารางสอน"},
+  {key:"group",      label:"งานกลุ่ม", max:15, color:"#10B981", dueDate:"2026-06-03", description:"แบ่งกลุ่ม 4-5 คน ส่งรายงาน"},
+  {key:"final",      label:"ปลายภาค", max:40, color:"#F59E0B", dueDate:"2026-06-15", description:"สอบปลายภาค บทที่ 1-10"},
 ];
 
 const ATT_STATUS = {

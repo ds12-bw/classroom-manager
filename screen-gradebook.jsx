@@ -10,6 +10,8 @@ const Gradebook = ({activeClass, setActiveClass, onNav, setActiveStudent}) => {
   const [addingCat, setAddingCat] = useState(false);
   const [newCatLabel, setNewCatLabel] = useState("");
   const [newCatMax, setNewCatMax] = useState(10);
+  const [newCatDueDate, setNewCatDueDate] = useState("");
+  const [newCatDescription, setNewCatDescription] = useState("");
 
   const cats = store.categories;
   const students = useMemo(() => store.students.filter(s => s.classId === cls.id).sort((a,b)=>a.no-b.no), [store.students, cls.id]);
@@ -55,9 +57,11 @@ const Gradebook = ({activeClass, setActiveClass, onNav, setActiveStudent}) => {
   const submitNewCat = () => {
     if (!newCatLabel.trim() || newCatMax <= 0) return;
     const color = CategoryColors[cats.length % CategoryColors.length];
-    window.addCategory(newCatLabel.trim(), parseInt(newCatMax), color);
+    window.addCategory(newCatLabel.trim(), parseInt(newCatMax), color, newCatDueDate, newCatDescription);
     setNewCatLabel("");
     setNewCatMax(10);
+    setNewCatDueDate("");
+    setNewCatDescription("");
     setAddingCat(false);
   };
 
@@ -89,30 +93,48 @@ const Gradebook = ({activeClass, setActiveClass, onNav, setActiveStudent}) => {
         {/* Add category modal/banner */}
         {addingCat && (
           <div className="card card-pad-lg" style={{background:"linear-gradient(135deg, #EEF0FF 0%, #FCE7F3 100%)", border:"none"}}>
-            <div className="row" style={{justifyContent:"space-between", marginBottom:12}}>
+            <div className="row" style={{justifyContent:"space-between", marginBottom:16}}>
               <div className="bold text-lg">เพิ่มประเภทคะแนนใหม่</div>
               <button className="btn btn-ghost" onClick={()=>setAddingCat(false)} style={{padding:"4px 10px"}}>ยกเลิก</button>
             </div>
-            <div className="row" style={{gap:12}}>
-              <div style={{flex:2}}>
-                <div className="text-sm muted" style={{marginBottom:4}}>ชื่อประเภท</div>
-                <input className="input" autoFocus value={newCatLabel} onChange={e=>setNewCatLabel(e.target.value)}
-                  placeholder="เช่น สอบกลางภาค, การมีส่วนร่วม, รายงาน..."
-                  style={{width:"100%"}}
-                  onKeyDown={e => e.key === "Enter" && submitNewCat()}/>
+            <div className="col" style={{gap:14}}>
+              <div className="row" style={{gap:12}}>
+                <div style={{flex:2}}>
+                  <div className="text-sm muted" style={{marginBottom:4}}>ชื่อประเภท *</div>
+                  <input className="input" autoFocus value={newCatLabel} onChange={e=>setNewCatLabel(e.target.value)}
+                    placeholder="เช่น เรียงความ, สอบ, โครงการ..."
+                    style={{width:"100%"}}
+                    onKeyDown={e => e.key === "Enter" && submitNewCat()}/>
+                </div>
+                <div style={{flex:1}}>
+                  <div className="text-sm muted" style={{marginBottom:4}}>คะแนนเต็ม</div>
+                  <input className="input num" type="number" min={1} max={100}
+                    value={newCatMax} onChange={e=>setNewCatMax(e.target.value)}
+                    style={{width:"100%"}}
+                    onKeyDown={e => e.key === "Enter" && submitNewCat()}/>
+                </div>
               </div>
-              <div style={{flex:1}}>
-                <div className="text-sm muted" style={{marginBottom:4}}>คะแนนเต็ม</div>
-                <input className="input num" type="number" min={1} max={100}
-                  value={newCatMax} onChange={e=>setNewCatMax(e.target.value)}
-                  style={{width:"100%"}}
-                  onKeyDown={e => e.key === "Enter" && submitNewCat()}/>
+              <div className="row" style={{gap:12}}>
+                <div style={{flex:1}}>
+                  <div className="text-sm muted" style={{marginBottom:4}}>วันส่ง (ถ้ามี)</div>
+                  <input className="input" type="date" value={newCatDueDate} onChange={e=>setNewCatDueDate(e.target.value)}
+                    style={{width:"100%"}}
+                    onKeyDown={e => e.key === "Enter" && submitNewCat()}/>
+                </div>
               </div>
-              <div style={{display:"flex", alignItems:"flex-end"}}>
+              <div>
+                <div className="text-sm muted" style={{marginBottom:4}}>รายละเอียดงาน (ถ้ามี)</div>
+                <textarea className="input" value={newCatDescription} onChange={e=>setNewCatDescription(e.target.value)}
+                  placeholder="เช่น เขียนเรียงความ 3 หน้า เรื่องที่คุณสนใจ"
+                  style={{width:"100%", minHeight:"80px", fontFamily:"inherit", resize:"vertical"}}
+                  onKeyDown={e => e.key === "Enter" && e.ctrlKey && submitNewCat()}/>
+              </div>
+              <div style={{display:"flex", gap:8, justifyContent:"flex-end"}}>
+                <button className="btn btn-ghost" onClick={()=>setAddingCat(false)}>ยกเลิก</button>
                 <button className="btn btn-primary" onClick={submitNewCat}><Icon name="plus" size={14}/> เพิ่ม</button>
               </div>
             </div>
-            <div className="muted text-sm" style={{marginTop:10}}>คะแนนใหม่จะถูกเพิ่มในทุกห้องเรียน · นักเรียนทุกคนจะเริ่มต้นที่ 0</div>
+            <div className="muted text-sm" style={{marginTop:12}}>* ชื่อประเภทจำเป็น · เมื่อนักเรียนได้คะแนนจะแสดงว่า "เสร็จแล้ว"</div>
           </div>
         )}
 

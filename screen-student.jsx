@@ -881,15 +881,15 @@ const StudentMobile = ({activeClass}) => {
                   </div>
                 </div>
 
-                {/* Recent Assignments Section - Real Data from Store */}
+                {/* Recent Assignments Section - From Categories */}
                 {(() => {
-                  // Get assignments for this class from store.notes
-                  const assignments = (store.notes[cls.id] || [])
-                    .filter(n => n.kind === "assignment")
-                    .sort((a, b) => new Date(a.due_date || "2099-12-31") - new Date(b.due_date || "2099-12-31"))
+                  // Get assignments from categories with due dates
+                  const assignments = cats
+                    .filter(c => c.dueDate)  // Only show categories with due dates
+                    .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))
                     .slice(0, 5)  // Show top 5 assignments
-                    .map(note => {
-                      const dueDate = note.due_date ? new Date(note.due_date) : null;
+                    .map(cat => {
+                      const dueDate = cat.dueDate ? new Date(cat.dueDate) : null;
                       const today = new Date();
                       today.setHours(0, 0, 0, 0);
                       let dueDateStr = "ไม่มีกำหนด";
@@ -897,9 +897,18 @@ const StudentMobile = ({activeClass}) => {
                       let icon = "✅";
                       let color = "#10B981";
 
+                      // Check if student has score for this category
+                      const studentScore = s ? (sc[cat.key] || 0) : 0;
+
                       if (dueDate) {
                         const diffDays = Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
-                        if (diffDays > 0) {
+                        if (studentScore > 0) {
+                          // Has score = submitted
+                          dueDateStr = "ส่งแล้ว";
+                          status = "done";
+                          icon = "✅";
+                          color = "#10B981";
+                        } else if (diffDays > 0) {
                           dueDateStr = diffDays === 1 ? "พรุ่งนี้" : `${diffDays} วันข้างหน้า`;
                           status = "pending";
                           icon = "⏳";
@@ -918,12 +927,12 @@ const StudentMobile = ({activeClass}) => {
                       }
 
                       return {
-                        title: note.text.split('\n')[0].substring(0, 50),  // First line, max 50 chars
+                        title: cat.label,
                         due: dueDateStr,
                         status,
                         icon,
                         color,
-                        fullText: note.text
+                        description: cat.description
                       };
                     });
 
@@ -940,6 +949,7 @@ const StudentMobile = ({activeClass}) => {
                               <div style={{flex:1}}>
                                 <div className="bold" style={{fontSize:19, color:"#E2E8F0", marginBottom:8}}>{item.title}</div>
                                 <div style={{fontSize:16, color:"#94A3B8"}}>{item.due}</div>
+                                {item.description && <div style={{fontSize:14, color:"#64748B", marginTop:6}}>{item.description}</div>}
                               </div>
                               <div style={{fontSize:14, fontWeight:600, color:item.color, padding:"8px 14px", background:item.color + "20", borderRadius:12}}>
                                 {item.status === "pending" ? "ค้าง" : item.status === "overdue" ? "เลย" : "เสร็จ"}

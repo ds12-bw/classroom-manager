@@ -40,6 +40,8 @@ create table if not exists score_categories (
   max         int  not null default 10,
   color       text default '#8B5CF6',
   sort_order  int  default 0,
+  due_date    date,
+  description text default '',
   created_at  timestamptz default now()
 );
 

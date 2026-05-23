@@ -145,7 +145,7 @@
         students: stuList.filter(st => st.classId === x.id).length,
       }));
       s.students = stuList;
-      s.categories = categories.data.map(x => ({ key: x.key, label: x.label, max: x.max, color: x.color }));
+      s.categories = categories.data.map(x => ({ key: x.key, label: x.label, max: x.max, color: x.color, dueDate: x.due_date, description: x.description || '' }));
       s.scores = {};
       stuList.forEach(st => {
         s.scores[st.id] = {};
@@ -189,14 +189,14 @@
   // ============================================================
   // Categories
   // ============================================================
-  function addCategory(label, max, color){
+  function addCategory(label, max, color, dueDate, description){
     const key = "c" + Date.now();
-    const cat = { key, label, max, color: color || "#8B5CF6" };
+    const cat = { key, label, max, color: color || "#8B5CF6", dueDate: dueDate || null, description: description || '' };
     setStore(s => {
       s.categories.push(cat);
       s.students.forEach(st => { s.scores[st.id][key] = 0; });
     });
-    sb().from('score_categories').insert({ ...cat, sort_order: state.categories.length })
+    sb().from('score_categories').insert({ key, label, max, color: cat.color, due_date: dueDate || null, description: description || '', sort_order: state.categories.length })
       .then(r => { if (r.error) dbError('addCategory', r.error); });
   }
   function removeCategory(key){
