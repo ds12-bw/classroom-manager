@@ -804,77 +804,77 @@ const StudentMobile = ({activeClass}) => {
                   <span className="class-chip" style={{padding:"8px 16px", fontSize:15, fontWeight:500}}><span className="class-chip-sq" style={{background:cls.color}}></span>{cls.name}</span>
                 </div>
 
-                {/* Dashboard Header Card with Gradient - LARGER */}
-                <div style={{padding:36, borderRadius:32, background:"linear-gradient(135deg, #1E293B 0%, #334155 100%)", color:"#F1F5F9", marginBottom:28, boxShadow:"0 20px 40px rgba(0,0,0,.4)", border:"1px solid rgba(148, 163, 184, 0.2)"}}>
-                  {/* Student Info Row - LARGER */}
-                  <div className="row" style={{gap:22, alignItems:"center"}}>
-                    <Avatar color="#3B82F6" label={s.name.slice(0,1)} size={88}/>
+                {/* Dashboard Header Card with Gradient - MUCH LARGER */}
+                <div style={{padding:44, borderRadius:32, background:"linear-gradient(135deg, #1E293B 0%, #334155 100%)", color:"#F1F5F9", marginBottom:32, boxShadow:"0 20px 40px rgba(0,0,0,.4)", border:"1px solid rgba(148, 163, 184, 0.2)"}}>
+                  {/* Student Info Row - MUCH LARGER */}
+                  <div className="row" style={{gap:24, alignItems:"center"}}>
+                    <Avatar color="#3B82F6" label={s.name.slice(0,1)} size={96}/>
                     <div style={{flex:1}}>
-                      <div className="bold" style={{fontSize:28, letterSpacing:-0.5, lineHeight:1.3, color:"#F1F5F9"}}>{s.name} {s.surname}</div>
-                      <div className="text-sm" style={{opacity:.75, marginTop:10, fontSize:17, color:"#CBD5E1"}}>เลขที่ {s.no} · {cls.name}</div>
+                      <div className="bold" style={{fontSize:31, letterSpacing:-0.5, lineHeight:1.3, color:"#F1F5F9"}}>{s.name} {s.surname}</div>
+                      <div className="text-sm" style={{opacity:.75, marginTop:12, fontSize:18, color:"#CBD5E1"}}>เลขที่ {s.no} · {cls.name}</div>
                     </div>
                   </div>
 
-                  {/* Stats Section with Dividers - LARGER FONTS & SPACING */}
-                  <div className="row" style={{justifyContent:"space-between", marginTop:28, paddingTop:26, borderTop:"1.5px solid rgba(148, 163, 184, 0.2)", gap:16}}>
+                  {/* Stats Section with Dividers - MUCH LARGER */}
+                  <div className="row" style={{justifyContent:"space-between", marginTop:32, paddingTop:32, borderTop:"1.5px solid rgba(148, 163, 184, 0.2)", gap:18}}>
                     {/* Score Stat */}
                     <div style={{textAlign:"center", flex:1}}>
-                      <div style={{fontSize:20, opacity:0.85, marginBottom:12}}>📊</div>
-                      <div className="num bold" style={{fontSize:36, color:"#F1F5F9"}}>{total}</div>
-                      <div className="text-sm" style={{opacity:.75, marginTop:10, fontSize:15, color:"#CBD5E1"}}>คะแนน</div>
-                      <div className="text-sm" style={{opacity:.55, fontSize:13, marginTop:6, color:"#94A3B8"}}>{maxTotal} เต็ม</div>
+                      <div style={{fontSize:24, opacity:0.85, marginBottom:14}}>📊</div>
+                      <div className="num bold" style={{fontSize:42, color:"#F1F5F9"}}>{total}</div>
+                      <div className="text-sm" style={{opacity:.75, marginTop:12, fontSize:16, color:"#CBD5E1"}}>คะแนน</div>
+                      <div className="text-sm" style={{opacity:.55, fontSize:14, marginTop:8, color:"#94A3B8"}}>{maxTotal} เต็ม</div>
                     </div>
                     <div style={{width:"1.5px", background:"rgba(148, 163, 184, 0.2)"}}></div>
 
                     {/* Grade Stat (Color-coded) */}
                     <div style={{textAlign:"center", flex:1}}>
-                      <div style={{fontSize:20, opacity:0.85, marginBottom:12}}>⭐</div>
-                      <div className="num bold" style={{fontSize:44, letterSpacing:-1, color:grade==="A"?"#FBBF24":grade==="B"?"#6EE7B7":grade==="C"?"#FED7AA":grade==="D"?"#F87171":"#F87171"}}>{grade}</div>
-                      <div className="text-sm" style={{opacity:.75, marginTop:10, fontSize:15, color:"#CBD5E1"}}>เกรด</div>
+                      <div style={{fontSize:24, opacity:0.85, marginBottom:14}}>⭐</div>
+                      <div className="num bold" style={{fontSize:52, letterSpacing:-1, color:grade==="A"?"#FBBF24":grade==="B"?"#6EE7B7":grade==="C"?"#FED7AA":grade==="D"?"#F87171":"#F87171"}}>{grade}</div>
+                      <div className="text-sm" style={{opacity:.75, marginTop:12, fontSize:16, color:"#CBD5E1"}}>เกรด</div>
                     </div>
                     <div style={{width:"1.5px", background:"rgba(148, 163, 184, 0.2)"}}></div>
 
                     {/* Attendance Stat */}
                     <div style={{textAlign:"center", flex:1}}>
-                      <div style={{fontSize:20, opacity:0.85, marginBottom:12}}>✓</div>
-                      <div className="num bold" style={{fontSize:36, color:"#F1F5F9"}}>{attPct}%</div>
-                      <div className="text-sm" style={{opacity:.75, marginTop:10, fontSize:15, color:"#CBD5E1"}}>เข้าเรียน</div>
+                      <div style={{fontSize:24, opacity:0.85, marginBottom:14}}>✓</div>
+                      <div className="num bold" style={{fontSize:42, color:"#F1F5F9"}}>{attPct}%</div>
+                      <div className="text-sm" style={{opacity:.75, marginTop:12, fontSize:16, color:"#CBD5E1"}}>เข้าเรียน</div>
                     </div>
                   </div>
                 </div>
 
-                {/* Score Cards Section - SCALED UP */}
-                <div className="card" style={{marginBottom:28, background:"#1E293B", borderRadius:24, border:"1px solid rgba(148, 163, 184, 0.15)", padding:"28px"}}>
-                  <div className="bold text-sm" style={{marginBottom:24, paddingBottom:20, borderBottom:"2px solid rgba(148, 163, 184, 0.2)", fontSize:20, color:"#F1F5F9"}}> 📊 คะแนนของฉัน</div>
+                {/* Score Cards Section - MUCH LARGER */}
+                <div className="card" style={{marginBottom:32, background:"#1E293B", borderRadius:26, border:"1px solid rgba(148, 163, 184, 0.15)", padding:"32px"}}>
+                  <div className="bold text-sm" style={{marginBottom:28, paddingBottom:24, borderBottom:"2px solid rgba(148, 163, 184, 0.2)", fontSize:22, color:"#F1F5F9"}}> 📊 คะแนนของฉัน</div>
                   {cats.map(c => (
-                    <div key={c.key} style={{marginBottom:20, paddingBottom:16}}>
-                      <div className="row" style={{justifyContent:"space-between", fontSize:16, marginBottom:12}}>
-                        <span style={{whiteSpace:"nowrap", fontWeight:500, color:"#E2E8F0", fontSize:18}}>{c.label}</span>
-                        <span className="num bold" style={{whiteSpace:"nowrap", fontSize:19, color:c.color, fontWeight:700}}>{sc[c.key]||0}<span className="muted" style={{fontSize:15, color:"#94A3B8"}}> / {c.max}</span></span>
+                    <div key={c.key} style={{marginBottom:24, paddingBottom:20}}>
+                      <div className="row" style={{justifyContent:"space-between", fontSize:16, marginBottom:14}}>
+                        <span style={{whiteSpace:"nowrap", fontWeight:500, color:"#E2E8F0", fontSize:20}}>{c.label}</span>
+                        <span className="num bold" style={{whiteSpace:"nowrap", fontSize:21, color:c.color, fontWeight:700}}>{sc[c.key]||0}<span className="muted" style={{fontSize:16, color:"#94A3B8"}}> / {c.max}</span></span>
                       </div>
                       <Bar value={sc[c.key]||0} max={c.max} color={c.color}/>
                     </div>
                   ))}
-                  <div style={{marginTop:24, paddingTop:24, borderTop:"2px solid rgba(148, 163, 184, 0.2)"}}>
-                    <div className="row" style={{justifyContent:"space-between", fontSize:16, marginBottom:12}}>
-                      <span style={{whiteSpace:"nowrap", fontWeight:500, color:"#E2E8F0", fontSize:18}}>✓ เช็คชื่อ</span>
-                      <span className="num bold" style={{whiteSpace:"nowrap", fontSize:19, color:"#6EE7B7", fontWeight:700}}>{attendScore}<span className="muted" style={{fontSize:15, color:"#94A3B8"}}> / 10</span></span>
+                  <div style={{marginTop:28, paddingTop:28, borderTop:"2px solid rgba(148, 163, 184, 0.2)"}}>
+                    <div className="row" style={{justifyContent:"space-between", fontSize:16, marginBottom:14}}>
+                      <span style={{whiteSpace:"nowrap", fontWeight:500, color:"#E2E8F0", fontSize:20}}>✓ เช็คชื่อ</span>
+                      <span className="num bold" style={{whiteSpace:"nowrap", fontSize:21, color:"#6EE7B7", fontWeight:700}}>{attendScore}<span className="muted" style={{fontSize:16, color:"#94A3B8"}}> / 10</span></span>
                     </div>
                     <Bar value={attendScore} max={10} color="#6EE7B7"/>
-                    <div className="muted text-sm" style={{marginTop:12, fontSize:15, color:"#64748B"}}>({attPct}% เข้าเรียน)</div>
+                    <div className="muted text-sm" style={{marginTop:14, fontSize:16, color:"#64748B"}}>({attPct}% เข้าเรียน)</div>
                   </div>
                 </div>
 
-                {/* Attendance Section - MUCH LARGER BOXES */}
-                <div className="card" style={{background:"#1E293B", border:"1px solid rgba(148, 163, 184, 0.15)", padding:"28px", marginBottom:20}}>
-                  <div className="bold text-sm" style={{marginBottom:24, fontSize:20, color:"#F1F5F9"}}>📋 การเข้าเรียน</div>
-                  <div style={{display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:18}}>
+                {/* Attendance Section - HUGE BOXES FILL SCREEN */}
+                <div className="card" style={{background:"#1E293B", border:"1px solid rgba(148, 163, 184, 0.15)", padding:"32px", marginBottom:28}}>
+                  <div className="bold text-sm" style={{marginBottom:28, fontSize:22, color:"#F1F5F9"}}>📋 การเข้าเรียน</div>
+                  <div style={{display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:22}}>
                     {Object.entries(att).map(([k,v]) => {
                       const st = window.ATT_STATUS[k];
                       return (
-                        <div key={k} style={{padding:26, borderRadius:22, background:st.bg + "22", textAlign:"center", boxShadow:"0 4px 12px rgba(0,0,0,0.2)", transition:"all 200ms ease", cursor:"pointer", border:`1px solid ${st.color}40`}}>
-                          <div className="num bold" style={{color:st.color, fontSize:36, lineHeight:1.2, fontWeight:700}}>{v}</div>
-                          <div style={{fontSize:18, color:st.color, fontWeight:600, marginTop:14}}>{st.label}</div>
+                        <div key={k} style={{padding:36, borderRadius:24, background:st.bg + "22", textAlign:"center", boxShadow:"0 4px 12px rgba(0,0,0,0.2)", transition:"all 200ms ease", cursor:"pointer", border:`1px solid ${st.color}40`, minHeight:"140px", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
+                          <div className="num bold" style={{color:st.color, fontSize:42, lineHeight:1.2, fontWeight:700}}>{v}</div>
+                          <div style={{fontSize:20, color:st.color, fontWeight:600, marginTop:16}}>{st.label}</div>
                         </div>
                       );
                     })}

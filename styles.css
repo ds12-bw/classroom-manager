@@ -300,7 +300,7 @@ button{ font-family: inherit; cursor:pointer; border:none; background:none; colo
 .divider{ height:1px; background: var(--line); margin: 14px 0; }
 
 /* Progress bars */
-.bar{ height:10px; border-radius:999px; background:#F3EFE7; overflow:hidden; }
+.bar{ height:14px; border-radius:999px; background:#F3EFE7; overflow:hidden; }
 .bar > div{ height:100%; border-radius:999px; }
 
 /* Page transitions */
