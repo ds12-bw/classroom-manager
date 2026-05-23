@@ -848,6 +848,13 @@ const StudentMobile = ({activeClass}) => {
                       <Bar value={sc[c.key]||0} max={c.max} color={c.color}/>
                     </div>
                   ))}
+                  <div style={{marginTop:12, paddingTop:12, borderTop:"1px solid var(--line)"}}>
+                    <div className="row" style={{justifyContent:"space-between", fontSize:12, marginBottom:4}}>
+                      <span style={{whiteSpace:"nowrap"}}>✓ เช็คชื่อ</span>
+                      <span className="num bold" style={{whiteSpace:"nowrap", color:"#10B981"}}>{attPct}<span className="muted">%</span></span>
+                    </div>
+                    <Bar value={attPct} max={100} color="#10B981"/>
+                  </div>
                 </div>
 
                 {/* Attendance Section */}
