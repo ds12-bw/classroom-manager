@@ -735,26 +735,26 @@ const StudentMobile = ({activeClass}) => {
           <div className="phone-screen">
             <div className="phone-notch"></div>
             {step === "login" ? (
-              // ===== LOGIN SCREEN (Dark Mode Elegant - SCALED UP) =====
-              <div style={{padding:"80px 32px 40px", display:"flex", flexDirection:"column", alignItems:"center", height:"100%", background:"linear-gradient(135deg, #0F172A 0%, #1E293B 100%)"}}>
+              // ===== LOGIN SCREEN (Dark Mode Elegant - MAXIMUM SIZE) =====
+              <div style={{padding:"60px 32px 32px", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", height:"100%", background:"linear-gradient(135deg, #0F172A 0%, #1E293B 100%)"}}>
 
-                {/* Class Avatar with Gradient - LARGER */}
-                <div style={{width:128, height:128, borderRadius:32, background:"linear-gradient(135deg, " + cls.color + " 0%, " + cls.color + "dd 100%)", display:"flex", alignItems:"center", justifyContent:"center", color:"#fff", fontFamily:"var(--font-num)", fontWeight:700, fontSize:48, marginTop:12, boxShadow:"0 20px 50px rgba(0,0,0,.4)"}}>
+                {/* Class Avatar with Gradient - HUGE */}
+                <div style={{width:144, height:144, borderRadius:36, background:"linear-gradient(135deg, " + cls.color + " 0%, " + cls.color + "dd 100%)", display:"flex", alignItems:"center", justifyContent:"center", color:"#fff", fontFamily:"var(--font-num)", fontWeight:700, fontSize:56, boxShadow:"0 24px 60px rgba(0,0,0,.5)"}}>
                   {cls.code.split("-")[0].slice(0,2)}
                 </div>
 
-                {/* Class Info - LARGER FONTS */}
-                <div className="bold" style={{marginTop:32, fontSize:28, letterSpacing:-0.5, textAlign:"center", color:"#F1F5F9"}}>{cls.name}</div>
-                <div className="muted text-sm" style={{marginTop:8, fontSize:16, textAlign:"center", color:"#CBD5E1"}}>เช็คคะแนน · การเข้าเรียน</div>
-                <div className="divider" style={{width:"80%", marginTop:28, marginBottom:0, background:"rgba(148, 163, 184, 0.2)"}}></div>
+                {/* Class Info - MUCH LARGER FONTS */}
+                <div className="bold" style={{marginTop:36, fontSize:32, letterSpacing:-0.5, textAlign:"center", color:"#F1F5F9"}}>{cls.name}</div>
+                <div className="muted text-sm" style={{marginTop:12, fontSize:18, textAlign:"center", color:"#CBD5E1"}}>เช็คคะแนน · การเข้าเรียน</div>
+                <div className="divider" style={{width:"85%", marginTop:32, marginBottom:0, background:"rgba(148, 163, 184, 0.2)"}}></div>
 
-                {/* Login Card - BIGGER PADDING */}
-                <div className="card" style={{marginTop:36, width:"100%", padding:36, boxShadow:"0 20px 40px rgba(0,0,0,.5)", borderColor: loginError ? "#FCA5A5" : "#334155", borderRadius:24, background:"#1E293B"}}>
-                  <div className="bold" style={{marginBottom:12, fontSize:19, color:"#F1F5F9"}}>เลขประจำตัวของคุณ</div>
-                  <div className="muted text-sm" style={{marginBottom:22, fontSize:15, color:"#94A3B8"}}>ใส่เลขที่ครูกำหนดให้เพื่อดูข้อมูล</div>
+                {/* Login Card - HUGE PADDING & CENTERED */}
+                <div className="card" style={{marginTop:40, width:"100%", maxWidth:"520px", padding:44, boxShadow:"0 24px 50px rgba(0,0,0,.6)", borderColor: loginError ? "#FCA5A5" : "#334155", borderRadius:28, background:"#1E293B"}}>
+                  <div className="bold" style={{marginBottom:14, fontSize:22, color:"#F1F5F9", textAlign:"center"}}>เลขประจำตัวของคุณ</div>
+                  <div className="muted text-sm" style={{marginBottom:28, fontSize:17, color:"#94A3B8", textAlign:"center"}}>ใส่เลขที่ครูกำหนดให้เพื่อดูข้อมูล</div>
 
                   <input className="input num"
-                    style={{width:"100%", fontSize:40, letterSpacing:8, textAlign:"center", borderColor: loginError ? "#EF4444" : "#475569", borderWidth: 2, borderRadius: 14, padding:"24px 18px", fontWeight:"700", background:"#0F172A", color:"#F1F5F9", boxShadow: loginError ? "0 0 0 3px rgba(239, 68, 68, 0.15)" : "0 4px 12px rgba(0,0,0,0.3)"}}
+                    style={{width:"100%", fontSize:48, letterSpacing:10, textAlign:"center", borderColor: loginError ? "#EF4444" : "#475569", borderWidth: 2, borderRadius: 16, padding:"28px 20px", fontWeight:"700", background:"#0F172A", color:"#F1F5F9", boxShadow: loginError ? "0 0 0 3px rgba(239, 68, 68, 0.15)" : "0 4px 12px rgba(0,0,0,0.3)", minHeight:"70px"}}
                     placeholder="0000"
                     value={pin}
                     onChange={e=>{ setPin(e.target.value); setLoginError(""); }}
@@ -763,14 +763,14 @@ const StudentMobile = ({activeClass}) => {
 
                   {/* Error Message */}
                   {loginError && (
-                    <div style={{marginTop:16, padding:"14px 16px", background:"rgba(239, 68, 68, 0.15)", color:"#FCA5A5", borderRadius:14, fontSize:15, textAlign:"center", borderLeft:"4px solid #EF4444", fontWeight:500}}>
+                    <div style={{marginTop:20, padding:"16px 18px", background:"rgba(239, 68, 68, 0.15)", color:"#FCA5A5", borderRadius:16, fontSize:17, textAlign:"center", borderLeft:"5px solid #EF4444", fontWeight:500}}>
                       ❌ {loginError}
                     </div>
                   )}
 
-                  {/* Login Button - BIGGER */}
+                  {/* Login Button - HUGE */}
                   <button className="btn btn-primary"
-                    style={{width:"100%", marginTop:28, justifyContent:"center", padding:"20px 24px", fontSize:18, fontWeight:700, boxShadow:"0 10px 30px rgba(59, 130, 246, .4)", borderRadius: 14, transition: "all 200ms ease", opacity: !pin.trim() ? 0.5 : 1, background: !pin.trim() ? "#1E40AF" : "#3B82F6"}}
+                    style={{width:"100%", marginTop:32, justifyContent:"center", padding:"24px 28px", fontSize:20, fontWeight:700, boxShadow:"0 12px 40px rgba(59, 130, 246, .5)", borderRadius: 16, transition: "all 200ms ease", opacity: !pin.trim() ? 0.5 : 1, background: !pin.trim() ? "#1E40AF" : "#3B82F6", minHeight:"68px"}}
                     disabled={!pin.trim()}
                     onClick={tryLogin}>
                     เข้าสู่ระบบ
@@ -778,11 +778,11 @@ const StudentMobile = ({activeClass}) => {
                 </div>
 
                 {/* Footer */}
-                <div className="muted text-sm" style={{marginTop:"auto", paddingTop:24, fontSize:14, textAlign:"center"}}>
-                  <div style={{display:"flex", alignItems:"center", justifyContent:"center", gap:8, marginBottom:6, padding:"10px 18px", background:"rgba(16, 185, 129, 0.15)", borderRadius:24, width:"fit-content", margin:"0 auto 6px"}}>
-                    🔒 <span style={{fontWeight:600, color:"#6EE7B7"}}>ปลอดภัย</span>
+                <div className="muted text-sm" style={{marginTop:40, paddingTop:0, fontSize:15, textAlign:"center"}}>
+                  <div style={{display:"flex", alignItems:"center", justifyContent:"center", gap:10, marginBottom:8, padding:"12px 20px", background:"rgba(16, 185, 129, 0.15)", borderRadius:26, width:"fit-content", margin:"0 auto 8px"}}>
+                    🔒 <span style={{fontWeight:700, color:"#6EE7B7"}}>ปลอดภัย</span>
                   </div>
-                  <div style={{fontSize:13, color:"#64748B"}}>โดย ครูดิจิทัล</div>
+                  <div style={{fontSize:14, color:"#64748B"}}>โดย ครูดิจิทัล</div>
                 </div>
               </div>
             ) : !s ? (
