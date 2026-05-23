@@ -866,7 +866,7 @@ const StudentMobile = ({activeClass}) => {
                 </div>
 
                 {/* Attendance Section - HUGE BOXES FILL SCREEN */}
-                <div className="card" style={{background:"#1E293B", border:"1px solid rgba(148, 163, 184, 0.15)", padding:"36px", marginBottom:0}}>
+                <div className="card" style={{background:"#1E293B", border:"1px solid rgba(148, 163, 184, 0.15)", padding:"36px", marginBottom:28}}>
                   <div className="bold text-sm" style={{marginBottom:30, fontSize:24, color:"#F1F5F9"}}>📋 การเข้าเรียน</div>
                   <div style={{display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:24}}>
                     {Object.entries(att).map(([k,v]) => {
@@ -878,6 +878,50 @@ const StudentMobile = ({activeClass}) => {
                         </div>
                       );
                     })}
+                  </div>
+                </div>
+
+                {/* Recent Assignments Section */}
+                <div className="card" style={{background:"#1E293B", border:"1px solid rgba(148, 163, 184, 0.15)", padding:"36px", marginBottom:28}}>
+                  <div className="bold text-sm" style={{marginBottom:26, fontSize:24, color:"#F1F5F9"}}>📝 งานล่าสุด</div>
+                  <div style={{display:"flex", flexDirection:"column", gap:18}}>
+                    {[
+                      {title:"โครงร่างเรียงความ", due:"3 วันข้างหน้า", status:"pending", icon:"⏳", color:"#F59E0B"},
+                      {title:"ทดสอบเนื้อหาบทที่ 5", due:"เสร็จแล้ว", status:"done", icon:"✅", color:"#10B981"},
+                      {title:"ส่งรายงานการสำรวจ", due:"5 วันข้างหน้า", status:"pending", icon:"⏳", color:"#F59E0B"},
+                    ].map((item, i) => (
+                      <div key={i} style={{padding:"20px 24px", background:"rgba(148, 163, 184, 0.1)", borderRadius:18, border:`2px solid ${item.color}40`, display:"flex", alignItems:"center", gap:18}}>
+                        <div style={{fontSize:28}}>{item.icon}</div>
+                        <div style={{flex:1}}>
+                          <div className="bold" style={{fontSize:19, color:"#E2E8F0", marginBottom:8}}>{item.title}</div>
+                          <div style={{fontSize:16, color:"#94A3B8"}}>{item.due}</div>
+                        </div>
+                        <div style={{fontSize:14, fontWeight:600, color:item.color, padding:"8px 14px", background:item.color + "20", borderRadius:12}}>{item.status === "pending" ? "ค้าง" : "เสร็จ"}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Teacher Comments & Feedback Section */}
+                <div className="card" style={{background:"#1E293B", border:"1px solid rgba(148, 163, 184, 0.15)", padding:"36px", marginBottom:0}}>
+                  <div className="bold text-sm" style={{marginBottom:26, fontSize:24, color:"#F1F5F9"}}>💬 ความเห็นจากครู</div>
+                  <div style={{display:"flex", flexDirection:"column", gap:16}}>
+                    {[
+                      {teacher:"ครู ประภา", comment:"เรียงความของเธอดีขึ้นมากแล้ว ต่อไปพยายามต่อนะ!", date:"เมื่อวานนี้", type:"positive", icon:"👍"},
+                      {teacher:"ครู สมชาย", comment:"ได้คะแนนสอบดีมากค่ะ ทำให้คนอื่นดูหลักการด้วยนะ", date:"3 วันที่แล้ว", type:"positive", icon:"⭐"},
+                      {teacher:"ครู นิดา", comment:"เสร็จแต่มีข้อผิดพลาด 2 ข้อ มาเข้ามติดตามนะ", date:"1 สัปดาห์ที่แล้ว", type:"feedback", icon:"📌"},
+                    ].map((item, i) => (
+                      <div key={i} style={{padding:"22px 26px", background:"rgba(148, 163, 184, 0.08)", borderRadius:18, border:`1px solid ${item.type === "positive" ? "#10B98140" : "#F59E0B40"}`, borderLeft:`4px solid ${item.type === "positive" ? "#10B981" : "#F59E0B"}`}}>
+                        <div style={{display:"flex", alignItems:"flex-start", gap:14, marginBottom:10}}>
+                          <div style={{fontSize:24}}>{item.icon}</div>
+                          <div style={{flex:1}}>
+                            <div className="bold" style={{fontSize:18, color:"#E2E8F0", marginBottom:4}}>{item.teacher}</div>
+                            <div style={{fontSize:15, color:"#CBD5E1", lineHeight:1.5}}>{item.comment}</div>
+                          </div>
+                        </div>
+                        <div style={{fontSize:14, color:"#64748B", paddingLeft:38}}>{item.date}</div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
