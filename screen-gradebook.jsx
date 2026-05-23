@@ -15,16 +15,32 @@ const Gradebook = ({activeClass, setActiveClass, onNav, setActiveStudent}) => {
   const students = useMemo(() => store.students.filter(s => s.classId === cls.id).sort((a,b)=>a.no-b.no), [store.students, cls.id]);
   const scores = store.scores;
 
-  const maxTotal = window.maxTotal();
+  const maxTotal = window.maxTotal() + 10;
 
   const totals = useMemo(() => {
     return students.map(s => {
       const sc = scores[s.id] || {};
-      const total = cats.reduce((a,c)=>a+(sc[c.key]||0), 0);
+      const scoreTotal = cats.reduce((a,c)=>a+(sc[c.key]||0), 0);
+
+      // Calculate attendance score
+      const att = (() => {
+        const c = {present:0, absent:0, leave:0, skip:0};
+        const byDate = store.attendance[cls.id] || {};
+        Object.values(byDate).forEach(dayMap => {
+          const st = dayMap[s.id];
+          if (st && c[st] !== undefined) c[st]++;
+        });
+        return c;
+      })();
+      const attTotal = att.present + att.absent + att.leave + att.skip;
+      const attPct = attTotal ? Math.round((att.present / attTotal) * 100) : 0;
+      const attendScore = Math.round((attPct / 100) * 10);
+
+      const total = scoreTotal + attendScore;
       const pct = maxTotal ? (total / maxTotal) * 100 : 0;
       return {sid: s.id, total, pct, grade: window.gradeFor(pct)};
     });
-  }, [students, scores, cats, maxTotal]);
+  }, [students, scores, cats, maxTotal, store.attendance, cls.id]);
 
   const stats = useMemo(() => {
     const arr = totals.map(t=>t.total);
