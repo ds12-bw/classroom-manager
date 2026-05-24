@@ -28,10 +28,48 @@ const Dashboard = ({onNav, setActiveClass, onImport}) => {
   };
 
   const refreshStats = () => {
-    setTotalStudents(store.students.length);
-    setAvgAttendance(94);
-    setPendingGrades(23);
+    // Calculate total students
+    const totalStudents = store.students.length;
+
+    // Calculate average attendance from all classes
+    let totalPresent = 0;
+    let totalRecords = 0;
+    if (store.attendance && Object.keys(store.attendance).length > 0) {
+      Object.keys(store.attendance).forEach(classId => {
+        const dates = store.attendance[classId];
+        Object.keys(dates).forEach(date => {
+          const students = dates[date];
+          Object.keys(students).forEach(sid => {
+            totalRecords++;
+            if (students[sid] === 'present') totalPresent++;
+          });
+        });
+      });
+    }
+    const avgAttendance = totalRecords > 0 ? Math.round((totalPresent / totalRecords) * 100) : 0;
+
+    // Count pending (empty) grade entries across all students and categories
+    let pendingGrades = 0;
+    if (store.scores && Object.keys(store.scores).length > 0) {
+      Object.keys(store.scores).forEach(sid => {
+        Object.keys(store.scores[sid]).forEach(key => {
+          const val = store.scores[sid][key];
+          if (val === null || val === undefined || val === '' || val === 0) {
+            pendingGrades++;
+          }
+        });
+      });
+    }
+
+    setTotalStudents(totalStudents);
+    setAvgAttendance(avgAttendance);
+    setPendingGrades(pendingGrades);
   };
+
+  // Initialize stats on mount
+  useEffect(() => {
+    refreshStats();
+  }, []);
 
   const today = store.schedule.filter(s => s.day === 1).map(s => ({...s, cls: store.classes.find(c=>c.id===s.classId)})).filter(t => t.cls);
   const dateDisplay = formatThaiDate(currentDate);
@@ -52,10 +90,10 @@ const Dashboard = ({onNav, setActiveClass, onImport}) => {
 
         {/* Stat row */}
         <div className="stat-grid">
-          <Stat label="ห้องเรียนของฉัน" value="5" foot="ภาคเรียนนี้" icon="grid" tone="primary"/>
+          <Stat label="ห้องเรียนของฉัน" value={store.classes.length} foot="ภาคเรียนนี้" icon="grid" tone="primary"/>
           <Stat label="นักเรียนทั้งหมด" value={totalStudents} foot="ครอบคลุม ม.4-ม.6" icon="user" tone="cyan"/>
-          <Stat label="เข้าเรียนเฉลี่ย" value={avgAttendance+"%"} foot="7 วันที่ผ่านมา" icon="check" tone="green"/>
-          <Stat label="คะแนนรอตรวจ" value={pendingGrades} foot="ใน 2 ห้องเรียน" icon="edit" tone="orange"/>
+          <Stat label="เข้าเรียนเฉลี่ย" value={avgAttendance+"%"} foot="วันที่ผ่านมา" icon="check" tone="green"/>
+          <Stat label="คะแนนรอตรวจ" value={pendingGrades} foot="ทั่วทุกห้อง" icon="edit" tone="orange"/>
         </div>
 
         <div style={{display:"grid", gridTemplateColumns:"1.4fr 1fr", gap:20}}>
