@@ -75,25 +75,31 @@ const Dashboard = ({onNav, setActiveClass, onImport}) => {
   const dateDisplay = formatThaiDate(currentDate);
 
   // Get assignments due today (categories with due_date = today)
-  const todayISO = currentDate.toISOString().split('T')[0];
   const todaysDueWork = [];
-  store.classes.forEach(cls => {
-    const cats = store.categories[cls.id] || [];
-    cats.forEach(cat => {
-      if (cat.dueDate) {
-        const catDate = cat.dueDate.split('T')[0];
-        if (catDate === todayISO) {
-          todaysDueWork.push({
-            classId: cls.id,
-            className: cls.name,
-            classColor: cls.color,
-            categoryLabel: cat.label,
-            dueDate: cat.dueDate
-          });
-        }
-      }
-    });
-  });
+  try {
+    const todayISO = currentDate.toISOString().split('T')[0];
+    if (store.classes && store.categories) {
+      store.classes.forEach(cls => {
+        const cats = store.categories[cls.id] || [];
+        cats.forEach(cat => {
+          if (cat && cat.dueDate) {
+            const catDate = cat.dueDate.split('T')[0];
+            if (catDate === todayISO) {
+              todaysDueWork.push({
+                classId: cls.id,
+                className: cls.name,
+                classColor: cls.color,
+                categoryLabel: cat.label,
+                dueDate: cat.dueDate
+              });
+            }
+          }
+        });
+      });
+    }
+  } catch (e) {
+    console.error('Error calculating todaysDueWork:', e);
+  }
 
   return (
     <div className="main fade-in">
