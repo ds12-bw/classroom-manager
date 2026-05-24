@@ -74,6 +74,27 @@ const Dashboard = ({onNav, setActiveClass, onImport}) => {
   const today = store.schedule.filter(s => s.day === 1).map(s => ({...s, cls: store.classes.find(c=>c.id===s.classId)})).filter(t => t.cls);
   const dateDisplay = formatThaiDate(currentDate);
 
+  // Get assignments due today (categories with due_date = today)
+  const todayISO = currentDate.toISOString().split('T')[0];
+  const todaysDueWork = [];
+  store.classes.forEach(cls => {
+    const cats = store.categories[cls.id] || [];
+    cats.forEach(cat => {
+      if (cat.dueDate) {
+        const catDate = cat.dueDate.split('T')[0];
+        if (catDate === todayISO) {
+          todaysDueWork.push({
+            classId: cls.id,
+            className: cls.name,
+            classColor: cls.color,
+            categoryLabel: cat.label,
+            dueDate: cat.dueDate
+          });
+        }
+      }
+    });
+  });
+
   return (
     <div className="main fade-in">
       <PageHead
@@ -130,25 +151,33 @@ const Dashboard = ({onNav, setActiveClass, onImport}) => {
             </div>
           </div>
 
-          {/* Quick actions */}
+          {/* Today's due assignments */}
           <div className="col">
-            <div className="card">
-              <div className="bold">ทำงานต่อจากเมื่อวาน</div>
-              <div className="muted text-sm" style={{marginBottom:14}}>คาบที่ค้างเช็คชื่อ / ใส่คะแนน</div>
-              {[
-                {cls:"คณิตศาสตร์ ม.4/1", task:"ตรวจการบ้านบทที่ 3", count:"12 คน", color:"#4F46E5"},
-                {cls:"แคลคูลัส ม.6/1", task:"ใส่คะแนนสอบย่อยครั้งที่ 2", count:"38 คน", color:"#F59E0B"},
-              ].map((t,i)=>(
-                <div key={i} className="row" style={{padding:"10px 0", borderTop:"1px solid var(--line)"}}>
-                  <span className="class-chip-sq" style={{background:t.color, width:8, height:8, borderRadius:3}}></span>
-                  <div style={{flex:1}}>
-                    <div className="bold text-sm">{t.task}</div>
-                    <div className="muted text-sm">{t.cls} · {t.count}</div>
+            {todaysDueWork.length > 0 ? (
+              <div className="card">
+                <div className="bold">งานที่ต้องส่งวันนี้</div>
+                <div className="muted text-sm" style={{marginBottom:14}}>{todaysDueWork.length} งาน</div>
+                {todaysDueWork.map((w,i)=>(
+                  <div key={i} className="row" style={{padding:"10px 0", borderTop:"1px solid var(--line)"}}>
+                    <span className="class-chip-sq" style={{background:w.classColor, width:8, height:8, borderRadius:3}}></span>
+                    <div style={{flex:1}}>
+                      <div className="bold text-sm">{w.categoryLabel}</div>
+                      <div className="muted text-sm">{w.className}</div>
+                    </div>
+                    <button className="btn btn-ghost" style={{padding:"4px 8px"}} onClick={()=>{ setActiveClass(w.classId); onNav("gradebook"); }}><Icon name="arrowRight" size={12}/></button>
                   </div>
-                  <button className="btn btn-ghost" style={{padding:"4px 8px"}}><Icon name="arrowRight" size={12}/></button>
+                ))}
+              </div>
+            ) : (
+              <div className="card" style={{background:"linear-gradient(135deg, #ECFDF5 0%, #DBEAFE 100%)", border:"none"}}>
+                <div className="row" style={{gap:8, marginBottom:8}}>
+                  <Icon name="check" size={16}/>
+                  <div className="bold">ไม่มีงานที่ต้องส่งวันนี้</div>
                 </div>
-              ))}
-            </div>
+                <div className="muted text-sm">สวยดี! งานล้วนหมดแล้ว 🎉</div>
+              </div>
+            )}
+          </div>
 
             <div className="card" style={{background:"linear-gradient(135deg, #EEF0FF 0%, #FCE7F3 100%)", border:"none"}}>
               <div className="row" style={{gap:8, marginBottom:8}}>
