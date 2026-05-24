@@ -14,7 +14,7 @@ create table if not exists teacher_credentials (
 
 -- Insert teacher PIN (122922)
 insert into teacher_credentials (pin, teacher_name)
-values ('122922', 'อ.พรทิพย์')
+values ('122922', 'อ.อาหมัดนาวาวี')
 on conflict(pin) do nothing;
 
 -- Enable RLS (Row Level Security) - allow anyone to check PIN

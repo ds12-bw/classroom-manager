@@ -104,7 +104,7 @@ const Dashboard = ({onNav, setActiveClass, onImport}) => {
   return (
     <div className="main fade-in">
       <PageHead
-        title="สวัสดีค่ะ อ.พรทิพย์ 👋"
+        title="สวัสดีค่ะ อ.อาหมัดนาวาวี 👋"
         sub={`${dateDisplay} · ภาคเรียนที่ 1/2569`}
         right={<>
           <button className="btn btn-ghost" onClick={refreshStats}><Icon name="refresh" size={14}/> Refresh</button>

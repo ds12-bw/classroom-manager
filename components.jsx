@@ -66,8 +66,8 @@ const Sidebar = ({active, onNav}) => (
     ))}
     <div className="sb-foot">
       <div style={{flex:1, minWidth:0}}>
-        <div className="avatar" style={{background:"#C7D2FE", marginBottom:10}}>อจ</div>
-        <div className="bold text-sm" style={{whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>อ.พรทิพย์ ใจดี</div>
+        <div className="avatar" style={{background:"#C7D2FE", marginBottom:10}}>อน</div>
+        <div className="bold text-sm" style={{whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>อ.อาหมัดนาวาวี</div>
         <div className="muted text-sm">ครูคณิตศาสตร์</div>
       </div>
       <button
