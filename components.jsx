@@ -65,11 +65,17 @@ const Sidebar = ({active, onNav}) => (
       </button>
     ))}
     <div className="sb-foot">
-      <div className="avatar" style={{background:"#C7D2FE"}}>อจ</div>
-      <div style={{minWidth:0}}>
+      <div style={{flex:1, minWidth:0}}>
+        <div className="avatar" style={{background:"#C7D2FE", marginBottom:10}}>อจ</div>
         <div className="bold text-sm" style={{whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>อ.พรทิพย์ ใจดี</div>
         <div className="muted text-sm">ครูคณิตศาสตร์</div>
       </div>
+      <button
+        onClick={() => { window.logoutTeacher(); window.location.reload(); }}
+        className="btn btn-ghost"
+        style={{padding:"6px 8px", minWidth:0}}>
+        <Icon name="logOut" size={16}/>
+      </button>
     </div>
   </aside>
 );

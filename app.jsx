@@ -11,12 +11,19 @@ const PRIMARY_OPTIONS = ["#4F46E5", "#0EA5E9", "#10B981", "#EC4899", "#F59E0B"];
 
 function App(){
   const store = window.useStore();
+  const [isTeacherLoggedIn, setIsTeacherLoggedIn] = useStateApp(false);
   const [active, setActive] = useStateApp("dashboard");
   const [activeClass, setActiveClass] = useStateApp("m401");
   const [activeStudent, setActiveStudent] = useStateApp("");
   const [importing, setImporting] = useStateApp(null); // null | "students" | "classes"
   const [importClassId, setImportClassId] = useStateApp(null);
   const [t, setTweak] = window.useTweaks(TWEAK_DEFAULTS);
+
+  // Check if teacher is logged in from localStorage
+  React.useEffect(() => {
+    const loggedIn = window.isTeacherLoggedIn();
+    setIsTeacherLoggedIn(loggedIn);
+  }, []);
 
   React.useEffect(() => { window.bootstrap(); }, []);
 
@@ -51,6 +58,75 @@ function App(){
     document.documentElement.style.setProperty("--primary-soft", t.primary + "1A");
   }, [t.primary]);
 
+  // Teacher PIN Screen Component
+  const TeacherPINScreen = () => {
+    const [pinInput, setPinInput] = useStateApp("");
+    const [error, setError] = useStateApp("");
+    const [loading, setLoading] = useStateApp(false);
+
+    const handlePINSubmit = async () => {
+      if (!pinInput.trim()) {
+        setError("กรุณาใส่รหัส PIN");
+        return;
+      }
+
+      setLoading(true);
+      setError("");
+
+      try {
+        const result = await window.verifyTeacherPin(pinInput);
+        if (result.success) {
+          setIsTeacherLoggedIn(true);
+        } else {
+          setError(result.error);
+        }
+      } catch (err) {
+        setError("เกิดข้อผิดพลาด: " + err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    return (
+      <div style={{display:"flex", alignItems:"center", justifyContent:"center", minHeight:"100vh", flexDirection:"column", gap:20, background:"linear-gradient(135deg, #0F172A 0%, #1E293B 100%)"}}>
+        <div className="sb-logo" style={{width:80, height:80, fontSize:32, borderRadius:20, background:"linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%)", boxShadow:"0 20px 40px rgba(79, 70, 229, 0.3)"}}>👨‍🏫</div>
+        <div className="bold" style={{fontSize:28, color:"#F1F5F9", textAlign:"center"}}>ครูดิจิทัล Classroom Manager</div>
+
+        <div className="card" style={{width:"100%", maxWidth:440, padding:40, background:"#1E293B", border:"1px solid #334155", borderRadius:20, boxShadow:"0 25px 50px rgba(0,0,0,.3)"}}>
+          <div className="bold" style={{fontSize:20, color:"#F1F5F9", marginBottom:12, textAlign:"center"}}>ยืนยันตัวตน</div>
+          <div className="muted text-sm" style={{fontSize:15, color:"#94A3B8", marginBottom:28, textAlign:"center"}}>กรุณากรอกรหัส PIN เพื่อเข้าระบบ</div>
+
+          <input
+            type="password"
+            className="input num"
+            style={{width:"100%", fontSize:36, letterSpacing:6, textAlign:"center", borderColor: error ? "#EF4444" : "#475569", borderWidth:2, borderRadius:16, padding:"24px 20px", fontWeight:"700", background:"#0F172A", color:"#F1F5F9", boxShadow: error ? "0 0 0 3px rgba(239, 68, 68, 0.15)" : "0 4px 12px rgba(0,0,0,0.3)", minHeight:"64px"}}
+            placeholder="••••••"
+            value={pinInput}
+            onChange={(e) => { setPinInput(e.target.value); setError(""); }}
+            onKeyDown={(e) => { if(e.key === "Enter" && !loading) handlePINSubmit(); }}
+            disabled={loading}
+            autoFocus
+          />
+
+          {error && (
+            <div style={{marginTop:16, padding:12, background:"#7F1D1D", borderRadius:10, borderLeft:"3px solid #EF4444", color:"#FECACA", fontSize:14}}>
+              {error}
+            </div>
+          )}
+
+          <button
+            onClick={handlePINSubmit}
+            disabled={loading}
+            style={{width:"100%", marginTop:24, padding:"16px 20px", background:loading ? "#6B7280" : "#4F46E5", color:"#fff", border:"none", borderRadius:12, fontSize:16, fontWeight:"600", cursor:loading ? "not-allowed" : "pointer", opacity:loading ? 0.7 : 1, transition:"all 200ms"}}>
+            {loading ? "กำลังตรวจสอบ..." : "เข้าระบบ"}
+          </button>
+        </div>
+
+        <div className="muted text-sm" style={{fontSize:12, color:"#64748B", marginTop:20}}>ระบบการจัดการห้องเรียนดิจิทัล</div>
+      </div>
+    );
+  };
+
   if (!store.loaded){
     return (
       <div style={{display:"flex", alignItems:"center", justifyContent:"center", minHeight:"100vh", flexDirection:"column", gap:14, background:"var(--bg)"}}>
@@ -64,6 +140,11 @@ function App(){
         )}
       </div>
     );
+  }
+
+  // If teacher not logged in, show PIN screen
+  if (!isTeacherLoggedIn) {
+    return <TeacherPINScreen />;
   }
 
   const nav = (screen) => setActive(screen);

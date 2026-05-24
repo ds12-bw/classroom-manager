@@ -568,6 +568,44 @@
     return max ? (studentTotal(sid, classId) / max) * 100 : 0;
   }
 
+  // Teacher PIN authentication
+  async function verifyTeacherPin(pin) {
+    try {
+      const { data, error } = await sb()
+        .from('teacher_credentials')
+        .select('id, teacher_name')
+        .eq('pin', pin)
+        .single();
+
+      if (error || !data) {
+        return { success: false, error: 'PIN ไม่ถูกต้อง' };
+      }
+
+      // Save session to localStorage
+      const sessionToken = 'teacher_' + Date.now();
+      localStorage.setItem('teacher_session', sessionToken);
+      localStorage.setItem('teacher_name', data.teacher_name);
+      localStorage.setItem('teacher_id', data.id);
+
+      return { success: true, teacher: data };
+    } catch (err) {
+      console.error('PIN verification error:', err);
+      return { success: false, error: 'เกิดข้อผิดพลาด: ' + err.message };
+    }
+  }
+
+  // Check if teacher is already logged in
+  function isTeacherLoggedIn() {
+    return !!localStorage.getItem('teacher_session');
+  }
+
+  // Logout teacher
+  function logoutTeacher() {
+    localStorage.removeItem('teacher_session');
+    localStorage.removeItem('teacher_name');
+    localStorage.removeItem('teacher_id');
+  }
+
   Object.assign(window, {
     useStore, setStore, bootstrap,
     addCategory, removeCategory, updateScore,
@@ -576,6 +614,7 @@
     setScheduleSlot, clearScheduleSlot,
     setAttendance, setAttendanceBulk, getAttendance, clearAttendance,
     addNote, updateNote, removeNote, togglePinNote, getNotes,
-    studentTotal, maxTotal, studentGradePercent
+    studentTotal, maxTotal, studentGradePercent,
+    verifyTeacherPin, isTeacherLoggedIn, logoutTeacher
   });
 })();
