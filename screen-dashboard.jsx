@@ -160,38 +160,49 @@ const Dashboard = ({onNav, setActiveClass, onImport}) => {
           {/* Today's due assignments */}
           <div className="col">
             {todaysDueWork.length > 0 ? (
-              <div className="card">
-                <div className="bold">งานที่ต้องส่งวันนี้</div>
-                <div className="muted text-sm" style={{marginBottom:14}}>{todaysDueWork.length} งาน</div>
-                {todaysDueWork.map((w,i)=>(
-                  <div key={i} className="row" style={{padding:"10px 0", borderTop:"1px solid var(--line)"}}>
-                    <span className="class-chip-sq" style={{background:w.classColor, width:8, height:8, borderRadius:3}}></span>
-                    <div style={{flex:1}}>
-                      <div className="bold text-sm">{w.categoryLabel}</div>
-                      <div className="muted text-sm">{w.className}</div>
+              <>
+                <div className="card">
+                  <div className="bold">งานที่ต้องส่งวันนี้</div>
+                  <div className="muted text-sm" style={{marginBottom:14}}>{todaysDueWork.length} งาน</div>
+                  {todaysDueWork.map((w,i)=>(
+                    <div key={i} className="row" style={{padding:"10px 0", borderTop:"1px solid var(--line)"}}>
+                      <span className="class-chip-sq" style={{background:w.classColor, width:8, height:8, borderRadius:3}}></span>
+                      <div style={{flex:1}}>
+                        <div className="bold text-sm">{w.categoryLabel}</div>
+                        <div className="muted text-sm">{w.className}</div>
+                      </div>
+                      <button className="btn btn-ghost" style={{padding:"4px 8px"}} onClick={()=>{ setActiveClass(w.classId); onNav("gradebook"); }}><Icon name="arrowRight" size={12}/></button>
                     </div>
-                    <button className="btn btn-ghost" style={{padding:"4px 8px"}} onClick={()=>{ setActiveClass(w.classId); onNav("gradebook"); }}><Icon name="arrowRight" size={12}/></button>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="card" style={{background:"linear-gradient(135deg, #ECFDF5 0%, #DBEAFE 100%)", border:"none"}}>
-                <div className="row" style={{gap:8, marginBottom:8}}>
-                  <Icon name="check" size={16}/>
-                  <div className="bold">ไม่มีงานที่ต้องส่งวันนี้</div>
+                  ))}
                 </div>
-                <div className="muted text-sm">สวยดี! งานล้วนหมดแล้ว 🎉</div>
-              </div>
+                <div className="card" style={{background:"linear-gradient(135deg, #EEF0FF 0%, #FCE7F3 100%)", border:"none"}}>
+                  <div className="row" style={{gap:8, marginBottom:8}}>
+                    <Icon name="bolt" size={16}/>
+                    <div className="bold">คะแนนรวมห้องอ่อนสุด</div>
+                  </div>
+                  <div className="muted text-sm" style={{marginBottom:12}}>แคลคูลัส ม.6/2 — มี 7 คนเสี่ยงไม่ผ่าน</div>
+                  <button className="btn btn-primary" onClick={()=>{ setActiveClass("m602"); onNav("gradebook"); }}>ดูรายละเอียด <Icon name="arrowRight" size={12}/></button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="card" style={{background:"linear-gradient(135deg, #ECFDF5 0%, #DBEAFE 100%)", border:"none"}}>
+                  <div className="row" style={{gap:8, marginBottom:8}}>
+                    <Icon name="check" size={16}/>
+                    <div className="bold">ไม่มีงานที่ต้องส่งวันนี้</div>
+                  </div>
+                  <div className="muted text-sm">สวยดี! งานล้วนหมดแล้ว 🎉</div>
+                </div>
+                <div className="card" style={{background:"linear-gradient(135deg, #EEF0FF 0%, #FCE7F3 100%)", border:"none"}}>
+                  <div className="row" style={{gap:8, marginBottom:8}}>
+                    <Icon name="bolt" size={16}/>
+                    <div className="bold">คะแนนรวมห้องอ่อนสุด</div>
+                  </div>
+                  <div className="muted text-sm" style={{marginBottom:12}}>แคลคูลัส ม.6/2 — มี 7 คนเสี่ยงไม่ผ่าน</div>
+                  <button className="btn btn-primary" onClick={()=>{ setActiveClass("m602"); onNav("gradebook"); }}>ดูรายละเอียด <Icon name="arrowRight" size={12}/></button>
+                </div>
+              </>
             )}
-
-            <div className="card" style={{background:"linear-gradient(135deg, #EEF0FF 0%, #FCE7F3 100%)", border:"none"}}>
-              <div className="row" style={{gap:8, marginBottom:8}}>
-                <Icon name="bolt" size={16}/>
-                <div className="bold">คะแนนรวมห้องอ่อนสุด</div>
-              </div>
-              <div className="muted text-sm" style={{marginBottom:12}}>แคลคูลัส ม.6/2 — มี 7 คนเสี่ยงไม่ผ่าน</div>
-              <button className="btn btn-primary" onClick={()=>{ setActiveClass("m602"); onNav("gradebook"); }}>ดูรายละเอียด <Icon name="arrowRight" size={12}/></button>
-            </div>
           </div>
         </div>
 
