@@ -273,8 +273,10 @@
       const cid = classId || (s.classes[0] && s.classes[0].id);
       const existingInClass = s.students.filter(x => x.classId === cid).length;
       newOnes.forEach((n, i) => {
+        // Simple unique ID: classId-timestamp-index (impossible to duplicate)
+        const uniqueId = cid + "-" + Date.now() + "-" + String(i).padStart(3,"0");
         const stu = {
-          id: String(n.id || "").trim() || ("ST" + Date.now() + Math.random().toString(36).substring(2,9) + String(i).padStart(2,"0")),
+          id: String(n.id || "").trim() || uniqueId,
           no: n.no || (existingInClass + i + 1),
           prefix: n.prefix || "เด็กชาย",
           name: n.name || "นักเรียนใหม่",
