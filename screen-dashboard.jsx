@@ -183,7 +183,6 @@ const Dashboard = ({onNav, setActiveClass, onImport}) => {
                 <div className="muted text-sm">สวยดี! งานล้วนหมดแล้ว 🎉</div>
               </div>
             )}
-          </div>
 
             <div className="card" style={{background:"linear-gradient(135deg, #EEF0FF 0%, #FCE7F3 100%)", border:"none"}}>
               <div className="row" style={{gap:8, marginBottom:8}}>
