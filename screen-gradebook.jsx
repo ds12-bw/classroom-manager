@@ -65,12 +65,100 @@ const Gradebook = ({activeClass, setActiveClass, onNav, setActiveStudent}) => {
     setAddingCat(false);
   };
 
+  // Convert letter grades to Thai numeric scale (1-4)
+  const letterToNumericGrade = (letterGrade) => {
+    if (!letterGrade) return 0;
+    const firstChar = letterGrade.charAt(0);
+    if (firstChar === 'A') return 4;
+    if (firstChar === 'B') return 3;
+    if (firstChar === 'C') return 2;
+    if (firstChar === 'D') return 1;
+    return 0; // F
+  };
+
+  // Export to Excel (via CSV which Excel can open)
+  const exportToExcel = () => {
+    const rows = [];
+
+    // Header row
+    const headerRow = ['เลขที่', 'รหัสประจำตัว', 'ชื่อ', 'สกุล'];
+    cats.forEach(c => headerRow.push(c.label));
+    headerRow.push('เช็คชื่อ', 'รวม', 'เกรด (A-F)', 'เกรด (1-4)');
+    rows.push(headerRow);
+
+    // Data rows
+    students.forEach(s => {
+      const sc = scores[s.id] || {};
+      const total = totals.find(t => t.sid === s.id);
+      const row = [
+        s.no,
+        s.id,
+        s.name,
+        s.surname || '-'
+      ];
+
+      // Category scores
+      cats.forEach(c => {
+        row.push(sc[c.key] || 0);
+      });
+
+      // Attendance score
+      const att = (() => {
+        const c = {present:0, absent:0, leave:0, skip:0};
+        const byDate = store.attendance[cls.id] || {};
+        Object.values(byDate).forEach(dayMap => {
+          const st = dayMap[s.id];
+          if (st && c[st] !== undefined) c[st]++;
+        });
+        return c;
+      })();
+      const attTotal = att.present + att.absent + att.leave + att.skip;
+      const attPct = attTotal ? Math.round((att.present / attTotal) * 100) : 0;
+      const attendScore = Math.round((attPct / 100) * 10);
+      row.push(attendScore);
+
+      // Total and grade
+      if (total) {
+        row.push(total.total);
+        row.push(total.grade);
+        row.push(letterToNumericGrade(total.grade));
+      } else {
+        row.push(0, 'F', 0);
+      }
+
+      rows.push(row);
+    });
+
+    // Convert to CSV
+    const csv = rows.map(row =>
+      row.map(cell => {
+        const str = String(cell);
+        // Escape quotes and wrap in quotes if contains comma
+        if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+          return '"' + str.replace(/"/g, '""') + '"';
+        }
+        return str;
+      }).join(',')
+    ).join('\n');
+
+    // Download
+    const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `${cls.name.replace(/\//g, '-')}-${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="main fade-in">
       <PageHead title="สมุดคะแนน"
         sub={<span><span className="class-chip-sq" style={{display:"inline-block", width:10, height:10, background:cls.color, marginRight:6, verticalAlign:"middle"}}></span>{cls.name} · เต็ม <span className="num">{maxTotal}</span> คะแนน</span>}
         right={<>
-          <button className="btn btn-ghost"><Icon name="download" size={14}/> Excel</button>
+          <button className="btn btn-ghost" onClick={exportToExcel}><Icon name="download" size={14}/> Excel</button>
           <button className="btn btn-ghost"><Icon name="file" size={14}/> PDF</button>
           <button className="btn btn-primary" onClick={()=>setAddingCat(true)}><Icon name="plus" size={14}/> เพิ่มประเภทคะแนน</button>
         </>}
