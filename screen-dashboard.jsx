@@ -2,17 +2,47 @@
 
 const Dashboard = ({onNav, setActiveClass, onImport}) => {
   const store = window.useStore();
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [totalStudents, setTotalStudents] = useState(store.students.length);
+  const [avgAttendance, setAvgAttendance] = useState(94);
+  const [pendingGrades, setPendingGrades] = useState(23);
+
+  // Update date every second for real-time display
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentDate(new Date());
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Format date to Thai style: "วันอังคารที่ 19 พฤษภาคม 2569"
+  const formatThaiDate = (date) => {
+    const days = ["วันอาทิตย์", "วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัสบดี", "วันศุกร์", "วันเสาร์"];
+    const months = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
+                    "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
+    const dayName = days[date.getDay()];
+    const dateNum = date.getDate();
+    const monthName = months[date.getMonth()];
+    const year = date.getFullYear() + 543; // Convert to Buddhist calendar
+    return `${dayName}ที่ ${dateNum} ${monthName} ${year}`;
+  };
+
+  const refreshStats = () => {
+    setTotalStudents(store.students.length);
+    setAvgAttendance(94);
+    setPendingGrades(23);
+  };
+
   const today = store.schedule.filter(s => s.day === 1).map(s => ({...s, cls: store.classes.find(c=>c.id===s.classId)})).filter(t => t.cls);
-  const totalStudents = store.students.length;
-  const avgAttendance = 94;
-  const pendingGrades = 23;
+  const dateDisplay = formatThaiDate(currentDate);
 
   return (
     <div className="main fade-in">
       <PageHead
         title="สวัสดีค่ะ อ.พรทิพย์ 👋"
-        sub="วันอังคารที่ 19 พฤษภาคม 2569 · ภาคเรียนที่ 1/2569"
+        sub={`${dateDisplay} · ภาคเรียนที่ 1/2569`}
         right={<>
+          <button className="btn btn-ghost" onClick={refreshStats}><Icon name="refresh" size={14}/> Refresh</button>
           <button className="btn btn-ghost" onClick={onImport}><Icon name="download" size={14}/> Import นักเรียน</button>
           <button className="btn btn-primary"><Icon name="plus" size={14}/> สร้างคาบเรียน</button>
         </>}
