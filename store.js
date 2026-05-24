@@ -274,7 +274,7 @@
       const existingInClass = s.students.filter(x => x.classId === cid).length;
       newOnes.forEach((n, i) => {
         const stu = {
-          id: String(n.id || "").trim() || ("65" + String(Date.now()).slice(-10) + String(i).padStart(2,"0")),
+          id: String(n.id || "").trim() || ("ST" + Date.now() + Math.random().toString(36).substring(2,9) + String(i).padStart(2,"0")),
           no: n.no || (existingInClass + i + 1),
           prefix: n.prefix || "เด็กชาย",
           name: n.name || "นักเรียนใหม่",
