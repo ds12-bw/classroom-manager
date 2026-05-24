@@ -65,17 +65,6 @@ const Gradebook = ({activeClass, setActiveClass, onNav, setActiveStudent}) => {
     setAddingCat(false);
   };
 
-  // Convert letter grades to Thai numeric scale (1-4)
-  const letterToNumericGrade = (letterGrade) => {
-    if (!letterGrade) return 0;
-    const firstChar = letterGrade.charAt(0);
-    if (firstChar === 'A') return 4;
-    if (firstChar === 'B') return 3;
-    if (firstChar === 'C') return 2;
-    if (firstChar === 'D') return 1;
-    return 0; // F
-  };
-
   // Export to Excel (via CSV which Excel can open)
   const exportToExcel = () => {
     const rows = [];
@@ -83,7 +72,7 @@ const Gradebook = ({activeClass, setActiveClass, onNav, setActiveStudent}) => {
     // Header row
     const headerRow = ['เลขที่', 'รหัสประจำตัว', 'ชื่อ', 'สกุล'];
     cats.forEach(c => headerRow.push(c.label));
-    headerRow.push('เช็คชื่อ', 'รวม', 'เกรด (A-F)', 'เกรด (1-4)');
+    headerRow.push('เช็คชื่อ', 'รวม', 'เกรด');
     rows.push(headerRow);
 
     // Data rows
@@ -117,13 +106,12 @@ const Gradebook = ({activeClass, setActiveClass, onNav, setActiveStudent}) => {
       const attendScore = Math.round((attPct / 100) * 10);
       row.push(attendScore);
 
-      // Total and grade
+      // Total and numeric grade
       if (total) {
         row.push(total.total);
         row.push(total.grade);
-        row.push(letterToNumericGrade(total.grade));
       } else {
-        row.push(0, 'F', 0);
+        row.push(0, 0);
       }
 
       rows.push(row);
@@ -238,11 +226,11 @@ const Gradebook = ({activeClass, setActiveClass, onNav, setActiveStudent}) => {
               <div className="muted text-sm" style={{whiteSpace:"nowrap"}}>{students.length} คน</div>
             </div>
             <div style={{display:"flex", gap:3, alignItems:"flex-end", height:48}}>
-              {["A","B+","B","C+","C","D+","D","F"].map(g => {
+              {[4, 3.5, 3, 2.5, 2, 1.5, 1, 0].map(g => {
                 const n = stats.gradeDist[g] || 0;
                 const dmax = Math.max(...Object.values(stats.gradeDist), 1);
                 const h = (n/dmax)*100;
-                const colors = {A:"#10B981", "B+":"#22C55E", B:"#84CC16", "C+":"#EAB308", C:"#F59E0B", "D+":"#F97316", D:"#EF4444", F:"#DC2626"};
+                const colors = {4:"#10B981", 3.5:"#22C55E", 3:"#84CC16", 2.5:"#EAB308", 2:"#F59E0B", 1.5:"#F97316", 1:"#EF4444", 0:"#DC2626"};
                 return (
                   <div key={g} style={{flex:1, textAlign:"center"}}>
                     <div style={{height:36, display:"flex", alignItems:"flex-end", justifyContent:"center"}}>
@@ -253,7 +241,7 @@ const Gradebook = ({activeClass, setActiveClass, onNav, setActiveStudent}) => {
               })}
             </div>
             <div style={{display:"flex", gap:3, marginTop:4}}>
-              {["A","B+","B","C+","C","D+","D","F"].map(g => (
+              {[4, 3.5, 3, 2.5, 2, 1.5, 1, 0].map(g => (
                 <div key={g} style={{flex:1, textAlign:"center"}}>
                   <div className="num" style={{fontSize:9, fontWeight:600}}>{g}</div>
                   <div className="num muted" style={{fontSize:9}}>{stats.gradeDist[g]||0}</div>
@@ -310,7 +298,7 @@ const Gradebook = ({activeClass, setActiveClass, onNav, setActiveStudent}) => {
                     const total = cats.reduce((a,c)=>a+(sc[c.key]||0), 0);
                     const pct = maxTotal ? (total/maxTotal)*100 : 0;
                     const grade = window.gradeFor(pct);
-                    const gradeColors = {A:"#10B981", "B+":"#22C55E", B:"#84CC16", "C+":"#EAB308", C:"#F59E0B", "D+":"#F97316", D:"#EF4444", F:"#DC2626"};
+                    const gradeColors = {4:"#10B981", 3.5:"#22C55E", 3:"#84CC16", 2.5:"#EAB308", 2:"#F59E0B", 1.5:"#F97316", 1:"#EF4444", 0:"#DC2626"};
                     return (
                       <tr key={s.id}>
                         <td className="num muted">{s.no}</td>
@@ -430,16 +418,16 @@ const Gradebook = ({activeClass, setActiveClass, onNav, setActiveStudent}) => {
   );
 };
 
-// Update gradeFor to take a percentage instead of raw score (since maxTotal varies)
+// Convert percentage to Thai numeric grade (1-4 with .5 increments)
 window.gradeFor = function(pct){
-  if(pct>=80) return "A";
-  if(pct>=75) return "B+";
-  if(pct>=70) return "B";
-  if(pct>=65) return "C+";
-  if(pct>=60) return "C";
-  if(pct>=55) return "D+";
-  if(pct>=50) return "D";
-  return "F";
+  if(pct>=80) return 4;      // A
+  if(pct>=75) return 3.5;    // B+
+  if(pct>=70) return 3;      // B
+  if(pct>=65) return 2.5;    // C+
+  if(pct>=60) return 2;      // C
+  if(pct>=55) return 1.5;    // D+
+  if(pct>=50) return 1;      // D
+  return 0;                  // F
 };
 
 Object.assign(window, {Gradebook});

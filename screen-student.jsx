@@ -829,7 +829,7 @@ const StudentMobile = ({activeClass}) => {
                     {/* Grade Stat (Color-coded) */}
                     <div style={{textAlign:"center", flex:1}}>
                       <div style={{fontSize:26, opacity:0.85, marginBottom:16}}>⭐</div>
-                      <div className="num bold" style={{fontSize:56, letterSpacing:-1, color:grade==="A"?"#FBBF24":grade==="B"?"#6EE7B7":grade==="C"?"#FED7AA":grade==="D"?"#F87171":"#F87171"}}>{grade}</div>
+                      <div className="num bold" style={{fontSize:56, letterSpacing:-1, color:grade>=4?"#10B981":grade>=3.5?"#22C55E":grade>=3?"#84CC16":grade>=2.5?"#EAB308":grade>=2?"#F59E0B":grade>=1.5?"#F97316":grade>=1?"#EF4444":"#DC2626"}}>{grade}</div>
                       <div className="text-sm" style={{opacity:.75, marginTop:14, fontSize:18, color:"#CBD5E1"}}>เกรด</div>
                     </div>
                     <div style={{width:"1.5px", background:"rgba(148, 163, 184, 0.2)"}}></div>
