@@ -17,6 +17,7 @@ function App(){
   const [activeStudent, setActiveStudent] = useStateApp("");
   const [importing, setImporting] = useStateApp(null); // null | "students" | "classes"
   const [importClassId, setImportClassId] = useStateApp(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useStateApp(false);
   const [t, setTweak] = window.useTweaks(TWEAK_DEFAULTS);
 
   // Check if teacher is logged in from localStorage

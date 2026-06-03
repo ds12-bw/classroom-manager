@@ -306,3 +306,249 @@ button{ font-family: inherit; cursor:pointer; border:none; background:none; colo
 /* Page transitions */
 .fade-in{ /* animation removed to avoid render quirks */ }
 @keyframes fadeIn{ from{ opacity:0; } to{ opacity:1; } }
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+  /* Hide sidebar, use top nav instead */
+  .app {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 56px;
+    width: 280px;
+    max-height: calc(100vh - 56px);
+    z-index: 999;
+    background: linear-gradient(180deg, #FFFFFF 0%, #FAF7F2 100%);
+    border-right: 1px solid var(--line);
+    overflow-y: auto;
+  }
+
+  .sidebar.mobile-open {
+    display: flex;
+  }
+
+  /* Mobile menu button */
+  .mobile-menu-btn {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 8px;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--ink-2);
+    cursor: pointer;
+  }
+
+  .mobile-menu-btn:hover {
+    background: #F3EFE7;
+  }
+
+  .app:not(.top-nav) {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  /* Ensure top nav is visible */
+  .topbar {
+    padding: 12px 16px;
+    gap: 16px;
+  }
+
+  .topbar-nav {
+    gap: 2px;
+  }
+
+  .topbar .sb-item {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .topbar .sb-item .sb-ico {
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+  }
+
+  .topbar .sb-brand-name,
+  .topbar .sb-brand-sub {
+    display: none;
+  }
+
+  /* Page layout */
+  .main {
+    padding: 0;
+  }
+
+  .page-head {
+    padding: 16px 16px 12px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .page-title {
+    font-size: 20px;
+  }
+
+  .page-body {
+    padding: 8px 12px 40px;
+  }
+
+  /* Buttons - bigger for touch */
+  .btn {
+    padding: 12px 16px;
+    font-size: 14px;
+    min-height: 44px;
+  }
+
+  .btn.btn-soft,
+  .btn.btn-ghost {
+    padding: 10px 14px;
+    min-height: 40px;
+  }
+
+  /* Input fields */
+  .input {
+    padding: 12px 14px;
+    font-size: 14px;
+    min-height: 44px;
+  }
+
+  /* Cards */
+  .card {
+    border-radius: 12px;
+    padding: 14px;
+  }
+
+  .card-pad-lg {
+    padding: 14px;
+  }
+
+  /* Grid layouts - stack on mobile */
+  .stat-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  /* Dashboard 2-column grid → stack */
+  [style*="grid-template-columns: 1.4fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* 5-column grid → 2 columns */
+  [style*="repeat(5, 1fr)"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  /* Table - horizontal scroll */
+  .table {
+    display: block;
+    overflow-x: auto;
+    font-size: 12px;
+  }
+
+  .table th,
+  .table td {
+    padding: 10px;
+    font-size: 12px;
+  }
+
+  /* Search bar */
+  .search {
+    min-width: auto;
+    width: 100%;
+  }
+
+  /* Row/Col utilities */
+  .row {
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .col {
+    gap: 10px;
+  }
+
+  /* Typography */
+  .text-sm {
+    font-size: 11px;
+  }
+
+  .text-lg {
+    font-size: 14px;
+  }
+
+  /* Stat item responsive */
+  .stat-label {
+    font-size: 11px;
+  }
+
+  .stat-value {
+    font-size: 20px;
+  }
+
+  /* Icon sizes */
+  [class*="icon"] {
+    font-size: 14px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Extra small phones */
+  .page-head {
+    padding: 12px 12px 8px;
+  }
+
+  .page-title {
+    font-size: 18px;
+  }
+
+  .page-sub {
+    font-size: 11px;
+  }
+
+  .topbar {
+    padding: 10px 12px;
+  }
+
+  .btn {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  /* Stack sidebar footer info */
+  .sb-foot {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+
+  /* Grid - single column */
+  .stat-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  [style*="repeat(2, 1fr)"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Padding reduction */
+  .card {
+    padding: 12px;
+  }
+
+  .divider {
+    margin: 10px 0;
+  }
+}

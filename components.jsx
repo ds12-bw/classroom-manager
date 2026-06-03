@@ -80,8 +80,15 @@ const Sidebar = ({active, onNav}) => (
   </aside>
 );
 
-const TopNav = ({active, onNav}) => (
+const TopNav = ({active, onNav, onMenuToggle}) => (
   <div className="topbar">
+    <button
+      onClick={onMenuToggle}
+      style={{padding:"4px 6px", minWidth:0, display:"none"}}
+      className="mobile-menu-btn"
+      title="เมนู">
+      <Icon name="menu" size={20}/>
+    </button>
     <div className="row" style={{gap:10}}>
       <div className="sb-logo">ค</div>
       <div className="bold">ครูดิจิทัล</div>
